@@ -5,7 +5,7 @@ def get_random_orders(num_obj, num_orders):
      return tuple(np.random.choice(obj,num_orders, replace=False))
 
 
-def _get_random_state(num_obj, num_stack):
+def get_random_state(num_obj, num_stack):
     stacks = []
     obj = np.arange(1, num_obj+1)
 
@@ -47,12 +47,16 @@ def _find_empty_stack(stacks):
 class Warehouse():
     expanded = 0
 
-    def __init__(self, num_box=5, num_stack=3, order=None) -> None:
+    def __init__(self, num_box=5, num_stack=3, order=None, start_state=None) -> None:
          #create random state
-          self.state = _get_random_state(num_box, num_stack)
+          # if start_state is None:
+          #      self.state = get_random_state(num_box, num_stack)
+          # else:
+          self.state = start_state
           self.out = np.empty(0,dtype=np.int32)
           self.order = order
-          self.stateFset = frozenset(tuple(o) for o in self.state)
+          self.stateFset = None
+          #self.stateFset = frozenset(tuple(o) for o in self.state)
 
 
     def apply(self, action):
@@ -145,6 +149,7 @@ class Warehouse():
         warehouse.state = copy.deepcopy(self.state)
         warehouse.out = copy.deepcopy(self.out)
         warehouse.order = self.order
+        warehouse.stateFset = self.stateFset
 
         return warehouse
           
