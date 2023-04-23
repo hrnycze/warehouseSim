@@ -88,7 +88,7 @@ if __name__ == "__main__":
 	
 	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
 
-	N = 10 #number of box in warehouse
+	N = 100 #number of box in warehouse
 	S = 4 #size of warehouse (num_stack)
 	
 	order = (2,1) #sequence of box to go out 
@@ -96,12 +96,12 @@ if __name__ == "__main__":
 	rnd_order = get_random_orders(N,S)
 	rnd_state = get_random_state(N,S)
 
-	#start = WarehouseHeuristic(N,S, rnd_order, rnd_state)
-	start = WarehouseWithoutHeuristic(N,S, rnd_order, rnd_state)
+	start = WarehouseHeuristic(N,S, rnd_order, rnd_state)
+	#start = WarehouseWithoutHeuristic(N,S, rnd_order, rnd_state)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_out()}")
 
-	astar = AStar()
+	astar = AStar(1.1)
 
 	start_t = time.time()
 	path = astar.search(start)
