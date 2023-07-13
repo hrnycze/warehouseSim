@@ -1,7 +1,7 @@
 import time
 
 import numpy as np
-from optimizer import AStar, WarehouseHeuristic
+from astar import AStar, WarehouseHeuristic
 from warehouse import Warehouse, get_random_orders, get_random_state
 from mipScheduleSolver import solve_schedule
 

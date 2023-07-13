@@ -47,11 +47,7 @@ def _find_empty_stack(stacks):
 class Warehouse():
     expanded = 0
 
-    def __init__(self, num_box=5, num_stack=3, order=None, start_state=None) -> None:
-         #create random state
-          # if start_state is None:
-          #      self.state = get_random_state(num_box, num_stack)
-          # else:
+    def __init__(self, start_state=None, order=None) -> None:
           self.state = start_state
           self.out = np.empty(0,dtype=np.int32)
           self.order = order
@@ -74,7 +70,7 @@ class Warehouse():
          if where == 0: # to ground of empty stack
               stack_to, stack_to_id = _find_empty_stack(self.state)
          
-         elif where == -1: # to ground of output stack
+         elif where == -1: # to output stack
               stack_to, stack_to_id = self.out, -1
          else:
               stack_to, stack_to_id = _find_stack(self.state, where)     
@@ -152,25 +148,65 @@ class Warehouse():
         warehouse.stateFset = self.stateFset
 
         return warehouse
-          
     
-
+    def visualization(self):
+        reversed_print = []
+        max_len_stack = 0
+        for _,stack in enumerate(self.state):
+             print(" _ ", end="..")
+             reversed_print.append("^^^''")
+             len_stack = len(stack)
+             if len_stack > max_len_stack:
+                  max_len_stack = len_stack
+        if self.out.size > max_len_stack:
+                  max_len_stack = self.out.size
+        
+        print(" _ ") # output
+        reversed_print.append("\n^^^''")
+        heigth = -1
+        while max_len_stack != - heigth - 1:
+          if len(self.out) >= - heigth and len(self.out) != 0 :
+               #print(f'|{self.out[heigth]}|', end="\n")
+               reversed_print.append(f'|{self.out[heigth]}|')
+          else: 
+               #print(" ", end="\n")
+               reversed_print.append("     ")   
+          for stack in self.state:
+               if len(stack) >= - heigth and len(stack) != 0 :
+                    print(f'|{stack[heigth]}|', end="  ")
+                    reversed_print.append(f'|{stack[heigth]}|  ')
+               else: 
+                    print(" ", end="    ")
+                    reversed_print.append("     ")
+          if len(self.out) >= - heigth and len(self.out) != 0 :
+               print(f'|{self.out[heigth]}|', end="\n")
+          else: 
+               print(" ", end="\n")
+          reversed_print.append("\n")         
+          
+          heigth -= 1
+        print(list(reversed(reversed_print)))
+        for i in list(reversed(reversed_print)):
+             print(i, end="")
+        print(f'\n{(5*len(self.state)-2)*" "}[output]')
 if __name__ == "__main__":
 
     # rndState = _get_random_state(6,3)
     # print(rndState)
     # print(frozenset(tuple(o) for o in rndState))
-    N = 6 #number of box in warehouse
-    S = 3 #size of warehouse (num_stack)
+    N = 11 #number of box in warehouse
+    S = 6 #size of warehouse (num_stack)
 
+    state = get_random_state(N,S)
     order = get_random_orders(N,S)
-    wh = Warehouse(N,S, order)
+    wh = Warehouse(state, order)
     #cwh = wh.clone()
     
 
     while True:
           #print(cwh)
           print(f"state: {wh}")
+          wh.visualization()
           print(f"actions = {wh.get_action()}")
           print("<from> <to>: ", end="")
         

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-from optimizer import WarehouseHeuristic, AStar, WarehouseWithoutHeuristic
+from astar import WarehouseHeuristic, AStar, WarehouseWithoutHeuristic
 from warehouse import Warehouse, get_random_orders, get_random_state 
 
 x = [1, 2, 3]

@@ -3,22 +3,22 @@ from queue import PriorityQueue
 import time
 
 class WarehouseWithoutHeuristic(Warehouse):
-	def __init__(self, num_box=5, num_stack=3, order=None, start_state=None):
-		super().__init__(num_box, num_stack, order, start_state)
+	def __init__(self, start_state=None, order=None):
+		super().__init__(start_state, order)
 	
 	def heuristic(self):
 		return 0
 
 class WarehouseHeuristic(Warehouse):
-	def __init__(self, num_box=5, num_stack=3, order=None, start_state=None):
-		super().__init__(num_box, num_stack, order, start_state)
+	def __init__(self, start_state=None, order=None):
+		super().__init__(start_state, order)
 		
 
 	def find_pos_in_stack(self, num, warehouse):
 		for i,stack in enumerate(warehouse):
 			for j,val in enumerate(stack):
 				if val == num:
-					return j + 1 # ret num of box above finded box
+					return j + 1 # ret num of box above finded box plus 1
 		return 0
 
 	def heuristic(self):
@@ -34,10 +34,10 @@ class WarehouseHeuristic(Warehouse):
 
 class State():
 	def __init__(self, warehouse, cost = 0, priority = 0, history = (None, None)):
-		self.warehouse = warehouse
+		self.warehouse = warehouse # current warehouse state
 		self.cost = cost # number of moves
-		self.priority = priority
-		self.history = history
+		self.priority = priority # priority queue
+		self.history = history 
 
 	def copy(self):
 		return State(self.warehouse.clone(), self.cost, self.priority, self.history)
@@ -52,7 +52,7 @@ class AStar():
 		self.weigth = weigth
 
 	def search(self, start):
-		# Return a list of optimal actions that takes start to goal.
+		# Return a optimal sequence of actions that takes from start to goal.
 
 		opened = PriorityQueue()
 		closed = {}
@@ -77,7 +77,7 @@ class AStar():
 				closed[state.warehouse] = (action, prev_state)
 			
 			for action, neighbor in state.warehouse.get_neighbors():
-				next_state = State(neighbor, state.cost+1, 0, (action, state.warehouse))
+				next_state = State(neighbor, state.cost + 1, 0, (action, state.warehouse))
 				next_state.priority = next_state.cost + self.weigth * next_state.warehouse.heuristic()
 				opened.put(next_state)
 
@@ -88,16 +88,16 @@ if __name__ == "__main__":
 	
 	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
 
-	N = 100 #number of box in warehouse
-	S = 4 #size of warehouse (num_stack)
+	N = 6 #number of box in warehouse
+	S = 3 #size of warehouse (num_stack)
 	
 	order = (2,1) #sequence of box to go out 
 
 	rnd_order = get_random_orders(N,S)
 	rnd_state = get_random_state(N,S)
 
-	start = WarehouseHeuristic(N,S, rnd_order, rnd_state)
-	#start = WarehouseWithoutHeuristic(N,S, rnd_order, rnd_state)
+	start = WarehouseHeuristic(rnd_state, rnd_order)
+	#start = WarehouseWithoutHeuristic(rnd_state, rnd_order)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_out()}")
 
