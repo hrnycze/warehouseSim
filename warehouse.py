@@ -53,7 +53,7 @@ class Warehouse():
           self.input = in_order
           self.output = np.empty(0,dtype=np.int32)
 
-          self.out_order = out_order
+          self.required_order = out_order
 
           self.stateFset = None
           self.isInputProccesed = isInputProccesed
@@ -69,7 +69,8 @@ class Warehouse():
               return
          
          stack_from, stack_from_id = None, None
-         if self.isInputProccesed and what == self.input[0]:
+
+         if self.isInputProccesed and not self.isGoalInput() and what == self.input[0]:
               stack_from_id = -1
          else:
               stack_from, stack_from_id = _find_stack(self.state, what)
@@ -114,17 +115,17 @@ class Warehouse():
                       if s_to.size == 0 and ((obj_a_from_in,0) not in actions):
                             actions.append((obj_a_from_in, 0))
                             continue
-
-                      object_b = s_to[0]
-
-                      actions.append((obj_a_from_in, object_b))
+                      elif s_to.size != 0:
+                            object_b = s_to[0]
+                            actions.append((obj_a_from_in, object_b))
 
           for s_from in self.state:
                 if s_from.size == 0:
                       continue
+                
                 object_a = s_from[0]
 
-                if self.output.size < len(self.out_order) and object_a == self.out_order[-self.output.size - 1]: #obj_a is next ordered box
+                if self.output.size < len(self.required_order) and object_a == self.required_order[-self.output.size - 1]: #obj_a is next ordered box
                       actions.append((object_a, -1)) # obj a move to output
 
                 for s_to in self.state:
@@ -159,19 +160,31 @@ class Warehouse():
          return tuple(self.output)
     
     def get_goal_output(self):
-         return self.out_order
+         return self.required_order
     
-    def isDone(self):
+    def isGoalOutput(self):
          return self.get_curr_output() == self.get_goal_output()
+    
+    def isGoalInput(self):
+         return len(self.input)==0
+
+    def isDone(self):
+         if self.isInputProccesed:
+              #input position must be empty and output order is required order
+              return self.isGoalInput() and self.isGoalOutput()
+         else:
+              return self.isGoalOutput()
 
     def __str__(self) -> str:
-        return str([list(o) for o in self.state]) + " Input: " +str(self.input)  + " Output: " +str(self.output) + " Orders: " +str(self.out_order) + " Done: " + str(self.isDone())
+        return str([list(o) for o in self.state]) + " Input: " +str(self.input)  + " Output: " +str(self.output) + " Orders: " +str(self.required_order) + " Done: " + str(self.isDone())
     
     def clone(self):
         warehouse = type(self)(0)
         warehouse.state = copy.deepcopy(self.state)
+        warehouse.input = copy.deepcopy(self.input)
         warehouse.output = copy.deepcopy(self.output)
-        warehouse.out_order = self.out_order
+        warehouse.required_order = self.required_order
+        warehouse.isInputProccesed = self.isInputProccesed
         warehouse.stateFset = self.stateFset
 
         return warehouse
@@ -227,7 +240,7 @@ if __name__ == "__main__":
     # rndState = _get_random_state(6,3)
     # print(rndState)
     # print(frozenset(tuple(o) for o in rndState))
-    N = 9 #number of box in warehouse
+    N = 6 #number of box in warehouse
     S = 3 #size of warehouse (num_stack)
 
     state = get_random_state(N,S)

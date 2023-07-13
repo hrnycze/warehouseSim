@@ -3,15 +3,15 @@ from queue import PriorityQueue
 import time
 
 class WarehouseWithoutHeuristic(Warehouse):
-	def __init__(self, start_state=None, order=None):
-		super().__init__(start_state, order)
+	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False):
+		super().__init__(start_state, order, in_order, isInputProccesed)
 	
 	def heuristic(self):
 		return 0
 
 class WarehouseHeuristic(Warehouse):
-	def __init__(self, start_state=None, order=None):
-		super().__init__(start_state, order)	
+	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False):
+		super().__init__(start_state, order, in_order, isInputProccesed)	
 
 	def find_pos_in_stack(self, num, warehouse):
 		for i,stack in enumerate(warehouse):
@@ -31,8 +31,8 @@ class WarehouseHeuristic(Warehouse):
 		return heur
 	
 class WarehouseHeuristic2(WarehouseHeuristic):
-	def __init__(self, start_state=None, order=None):
-		super().__init__(start_state, order)
+	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False):
+		super().__init__(start_state, order, in_order, isInputProccesed)	
 
 	def heuristic(self):
 		curr_state = self.get_state()
@@ -42,6 +42,22 @@ class WarehouseHeuristic2(WarehouseHeuristic):
 		for goal_val in goal_order:
 			heur += self.find_pos_in_stack(goal_val,curr_state) - 1
 			heur += len(self.get_goal_output()) - len(self.get_curr_output())
+	
+		return heur
+	
+class WarehouseHeuristicInput(WarehouseHeuristic):
+	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False):
+		super().__init__(start_state, order, in_order, isInputProccesed)	
+
+	def heuristic(self):
+		curr_state = self.get_state()
+		goal_order = self.get_goal_output()
+
+		heur = 0
+		for goal_val in goal_order:
+			heur += self.find_pos_in_stack(goal_val,curr_state) - 1
+			heur += len(self.get_goal_output()) - len(self.get_curr_output())
+			heur += len(self.input)
 	
 		return heur
 
@@ -110,9 +126,13 @@ if __name__ == "__main__":
 
 	rnd_order = get_random_orders(N,S)
 	rnd_state = get_random_state(N,S)
+	in_order = get_random_orders(N+10,3,N+1)
 
-	start = WarehouseHeuristic(rnd_state, rnd_order)
+	#start = WarehouseHeuristic(rnd_state, rnd_order)
 	#start = WarehouseWithoutHeuristic(rnd_state, rnd_order)
+
+	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True)
+	start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 
