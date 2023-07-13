@@ -27,7 +27,7 @@ if __name__ == "__main__":
     start = WarehouseHeuristic(N,S, order=tuple(reversed(batch)), start_state=rnd_state)
 	#start = WarehouseWithoutHeuristic(N,S, rnd_order, rnd_state)
 
-    print(f"Searching path: {start} -> for order {start.get_goal_out()}")
+    print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 
     astar = AStar(weigth=1.1)
 

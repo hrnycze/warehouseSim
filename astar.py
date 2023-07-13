@@ -11,8 +11,7 @@ class WarehouseWithoutHeuristic(Warehouse):
 
 class WarehouseHeuristic(Warehouse):
 	def __init__(self, start_state=None, order=None):
-		super().__init__(start_state, order)
-		
+		super().__init__(start_state, order)	
 
 	def find_pos_in_stack(self, num, warehouse):
 		for i,stack in enumerate(warehouse):
@@ -23,12 +22,27 @@ class WarehouseHeuristic(Warehouse):
 
 	def heuristic(self):
 		curr_state = self.get_state()
-		goal_order = self.get_goal_out()
+		goal_order = self.get_goal_output()
 
 		heur = 0
 		for goal_val in goal_order:
 			heur += self.find_pos_in_stack(goal_val,curr_state)
 			
+		return heur
+	
+class WarehouseHeuristic2(WarehouseHeuristic):
+	def __init__(self, start_state=None, order=None):
+		super().__init__(start_state, order)
+
+	def heuristic(self):
+		curr_state = self.get_state()
+		goal_order = self.get_goal_output()
+
+		heur = 0
+		for goal_val in goal_order:
+			heur += self.find_pos_in_stack(goal_val,curr_state) - 1
+			heur += len(self.get_goal_output()) - len(self.get_curr_output())
+	
 		return heur
 
 
@@ -80,6 +94,7 @@ class AStar():
 				next_state = State(neighbor, state.cost + 1, 0, (action, state.warehouse))
 				next_state.priority = next_state.cost + self.weigth * next_state.warehouse.heuristic()
 				opened.put(next_state)
+				#print(f"{state.warehouse}/{next_state.warehouse}[{action}]")
 
 		return None
 	
@@ -88,8 +103,8 @@ if __name__ == "__main__":
 	
 	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
 
-	N = 6 #number of box in warehouse
-	S = 3 #size of warehouse (num_stack)
+	N = 9 #number of box in warehouse
+	S = 4 #size of warehouse (num_stack)
 	
 	order = (2,1) #sequence of box to go out 
 
@@ -99,7 +114,7 @@ if __name__ == "__main__":
 	start = WarehouseHeuristic(rnd_state, rnd_order)
 	#start = WarehouseWithoutHeuristic(rnd_state, rnd_order)
 
-	print(f"Searching path: {start} -> for order {start.get_goal_out()}")
+	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 
 	astar = AStar(1.1)
 
@@ -116,9 +131,11 @@ if __name__ == "__main__":
 
 		s = start.clone()
 		print(s)
+		s.visualization()
 		for a in path:
 			s.apply(a)
-			print(s)    
+			print(s)
+			s.visualization()    
 	else:
 		print("NO PATH exists.")
 	

@@ -1,7 +1,7 @@
 import random, copy, numpy as np
 
-def get_random_orders(num_obj, num_orders):
-     obj = np.arange(1, num_obj+1)
+def get_random_orders(num_obj, num_orders, num_from=1):
+     obj = np.arange(num_from, num_obj+1)
      return tuple(np.random.choice(obj,num_orders, replace=False))
 
 
@@ -47,13 +47,19 @@ def _find_empty_stack(stacks):
 class Warehouse():
     expanded = 0
 
-    def __init__(self, start_state=None, order=None) -> None:
+    def __init__(self, start_state=None, out_order=None, in_order=None, isInputProccesed = False) -> None:
           self.state = start_state
-          self.out = np.empty(0,dtype=np.int32)
-          self.order = order
-          self.stateFset = None
-          #self.stateFset = frozenset(tuple(o) for o in self.state)
 
+          self.input = in_order
+          self.output = np.empty(0,dtype=np.int32)
+
+          self.out_order = out_order
+
+          self.stateFset = None
+          self.isInputProccesed = isInputProccesed
+
+    def apply_from_input():
+         return None
 
     def apply(self, action):
          what, where = action
@@ -62,29 +68,38 @@ class Warehouse():
               print("!invalid action what==where")
               return
          
-         stack_from, stack_from_id = _find_stack(self.state, what)
-         if stack_from is None:
-              print("!invalid action cannot move what")
+         stack_from, stack_from_id = None, None
+         if self.isInputProccesed and what == self.input[0]:
+              stack_from_id = -1
+         else:
+              stack_from, stack_from_id = _find_stack(self.state, what)
+
+         if stack_from is None and stack_from_id is None:
+              print("!invalid action cannot move 'what'")
               return
          
          if where == 0: # to ground of empty stack
               stack_to, stack_to_id = _find_empty_stack(self.state)
          
          elif where == -1: # to output stack
-              stack_to, stack_to_id = self.out, -1
+              stack_to, stack_to_id = self.output, -1
          else:
               stack_to, stack_to_id = _find_stack(self.state, where)     
         
          if stack_to is None:
-                print("!invalid action empty stack or where DON'T exists")
+                print("!invalid action empty stack or 'where' DON'T exists")
                 return
 
          #move object
-         self.state[stack_from_id] = np.delete(stack_from,0)
+         if stack_from_id != -1:
+            self.state[stack_from_id] = np.delete(stack_from,0)
+         else:
+            self.input = np.delete(self.input, 0)
+         
          if stack_to_id != -1:
             self.state[stack_to_id] = np.insert(stack_to,0, what)
          else:
-            self.out = np.insert(self.out,0,what)
+            self.output = np.insert(self.output,0,what)
 
          self.stateFset = frozenset(tuple(o) for o in self.state)
 
@@ -92,16 +107,28 @@ class Warehouse():
           Warehouse.expanded += 1
 
           actions = []
+          
+          if self.isInputProccesed and self.input is not None and len(self.input) > 0:
+               obj_a_from_in = self.input[0]
+               for s_to in self.state:
+                      if s_to.size == 0 and ((obj_a_from_in,0) not in actions):
+                            actions.append((obj_a_from_in, 0))
+                            continue
+
+                      object_b = s_to[0]
+
+                      actions.append((obj_a_from_in, object_b))
+
           for s_from in self.state:
                 if s_from.size == 0:
                       continue
                 object_a = s_from[0]
 
-                if self.out.size < len(self.order) and object_a == self.order[-self.out.size - 1]: #obj_a is next ordered box
+                if self.output.size < len(self.out_order) and object_a == self.out_order[-self.output.size - 1]: #obj_a is next ordered box
                       actions.append((object_a, -1)) # obj a move to output
 
                 for s_to in self.state:
-                      if len(s_from) > 1 and s_to.size == 0:
+                      if len(s_from) > 1 and s_to.size == 0 and ((object_a,0) not in actions):
                             actions.append((object_a,0)) # obj a move to ground
                             continue
                       elif s_to.size == 0:
@@ -128,23 +155,23 @@ class Warehouse():
     def get_state(self):
          return self.stateFset
 
-    def get_cur_out(self):
-         return tuple(self.out)
+    def get_curr_output(self):
+         return tuple(self.output)
     
-    def get_goal_out(self):
-         return self.order
+    def get_goal_output(self):
+         return self.out_order
     
     def isDone(self):
-         return self.get_cur_out() == self.get_goal_out()
+         return self.get_curr_output() == self.get_goal_output()
 
     def __str__(self) -> str:
-        return str([list(o) for o in self.state]) + " Output: " +str(self.out) + " Orders: " +str(self.order) + " Done: " + str(self.isDone())
+        return str([list(o) for o in self.state]) + " Input: " +str(self.input)  + " Output: " +str(self.output) + " Orders: " +str(self.out_order) + " Done: " + str(self.isDone())
     
     def clone(self):
         warehouse = type(self)(0)
         warehouse.state = copy.deepcopy(self.state)
-        warehouse.out = copy.deepcopy(self.out)
-        warehouse.order = self.order
+        warehouse.output = copy.deepcopy(self.output)
+        warehouse.out_order = self.out_order
         warehouse.stateFset = self.stateFset
 
         return warehouse
@@ -152,59 +179,64 @@ class Warehouse():
     def visualization(self):
         reversed_print = []
         max_len_stack = 0
-        for _,stack in enumerate(self.state):
-             print(" _ ", end="..")
-             reversed_print.append("^^^''")
+        for i,stack in enumerate(self.state):
+             #print(" _ ", end="..")
+             if i == 0:
+                  reversed_print.append("***''")
+             else:
+                  reversed_print.append("^^^''")
              len_stack = len(stack)
              if len_stack > max_len_stack:
                   max_len_stack = len_stack
-        if self.out.size > max_len_stack:
-                  max_len_stack = self.out.size
+        if self.output.size > max_len_stack:
+                  max_len_stack = self.output.size
         
-        print(" _ ") # output
+        #print(" _ ") # output
         reversed_print.append("\n^^^''")
         heigth = -1
         while max_len_stack != - heigth - 1:
-          if len(self.out) >= - heigth and len(self.out) != 0 :
+          if len(self.output) >= - heigth and len(self.output) != 0 :
                #print(f'|{self.out[heigth]}|', end="\n")
-               reversed_print.append(f'|{self.out[heigth]}|')
+               reversed_print.append(f'|{self.output[heigth]}|')
           else: 
                #print(" ", end="\n")
                reversed_print.append("     ")   
           for stack in self.state:
                if len(stack) >= - heigth and len(stack) != 0 :
-                    print(f'|{stack[heigth]}|', end="  ")
+                    #print(f'|{stack[heigth]}|', end="  ")
                     reversed_print.append(f'|{stack[heigth]}|  ')
                else: 
-                    print(" ", end="    ")
+                    #print(" ", end="    ")
                     reversed_print.append("     ")
-          if len(self.out) >= - heigth and len(self.out) != 0 :
-               print(f'|{self.out[heigth]}|', end="\n")
-          else: 
-               print(" ", end="\n")
+          # if len(self.out) >= - heigth and len(self.out) != 0 :
+          #      print(f'|{self.out[heigth]}|', end="\n")
+          # else: 
+          #      print(" ", end="\n")
           reversed_print.append("\n")         
           
           heigth -= 1
-        print(list(reversed(reversed_print)))
+        #print(list(reversed(reversed_print)))
         for i in list(reversed(reversed_print)):
              print(i, end="")
         print(f'\n{(5*len(self.state)-2)*" "}[output]')
+
+
+
 if __name__ == "__main__":
 
     # rndState = _get_random_state(6,3)
     # print(rndState)
     # print(frozenset(tuple(o) for o in rndState))
-    N = 11 #number of box in warehouse
-    S = 6 #size of warehouse (num_stack)
+    N = 9 #number of box in warehouse
+    S = 3 #size of warehouse (num_stack)
 
     state = get_random_state(N,S)
-    order = get_random_orders(N,S)
-    wh = Warehouse(state, order)
-    #cwh = wh.clone()
+    out_order = get_random_orders(N,S)
+    in_order = get_random_orders(N+10,3,N+1)
+    wh = Warehouse(state, out_order, in_order, isInputProccesed=True)
     
 
     while True:
-          #print(cwh)
           print(f"state: {wh}")
           wh.visualization()
           print(f"actions = {wh.get_action()}")
