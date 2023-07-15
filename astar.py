@@ -3,15 +3,15 @@ from queue import PriorityQueue
 import time
 
 class WarehouseWithoutHeuristic(Warehouse):
-	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False):
-		super().__init__(start_state, order, in_order, isInputProccesed)
+	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
+		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)
 	
 	def heuristic(self):
 		return 0
 
 class WarehouseHeuristic(Warehouse):
-	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False):
-		super().__init__(start_state, order, in_order, isInputProccesed)	
+	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
+		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)	
 
 	def find_pos_in_stack(self, num, warehouse):
 		for i,stack in enumerate(warehouse):
@@ -31,8 +31,8 @@ class WarehouseHeuristic(Warehouse):
 		return heur
 	
 class WarehouseHeuristic2(WarehouseHeuristic):
-	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False):
-		super().__init__(start_state, order, in_order, isInputProccesed)	
+	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
+		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)	
 
 	def heuristic(self):
 		curr_state = self.get_state()
@@ -46,8 +46,8 @@ class WarehouseHeuristic2(WarehouseHeuristic):
 		return heur
 	
 class WarehouseHeuristicInput(WarehouseHeuristic):
-	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False):
-		super().__init__(start_state, order, in_order, isInputProccesed)	
+	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
+		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)	
 
 	def heuristic(self):
 		curr_state = self.get_state()
@@ -57,7 +57,8 @@ class WarehouseHeuristicInput(WarehouseHeuristic):
 		for goal_val in goal_order:
 			heur += self.find_pos_in_stack(goal_val,curr_state) - 1
 			heur += len(self.get_goal_output()) - len(self.get_curr_output())
-			heur += len(self.input)
+		
+		heur += len(self.input)
 	
 		return heur
 
@@ -107,6 +108,7 @@ class AStar():
 				closed[state.warehouse] = (action, prev_state)
 			
 			for action, neighbor in state.warehouse.get_neighbors():
+				print(state.warehouse.get_neighbors())
 				next_state = State(neighbor, state.cost + 1, 0, (action, state.warehouse))
 				next_state.priority = next_state.cost + self.weigth * next_state.warehouse.heuristic()
 				opened.put(next_state)
@@ -116,10 +118,20 @@ class AStar():
 	
 
 if __name__ == "__main__":
+	import sys
+
+	sim2file = True
+	origin_sdtout = sys.stdout
+	if sim2file:
+		print("Start print to file")
+		file = open("doc/simulation.txt", "w")
+		sys.stdout = file
+		
+	
 	
 	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
 
-	N = 9 #number of box in warehouse
+	N = 10#number of box in warehouse
 	S = 4 #size of warehouse (num_stack)
 	
 	order = (2,1) #sequence of box to go out 
@@ -128,11 +140,11 @@ if __name__ == "__main__":
 	rnd_state = get_random_state(N,S)
 	in_order = get_random_orders(N+10,3,N+1)
 
-	#start = WarehouseHeuristic(rnd_state, rnd_order)
-	#start = WarehouseWithoutHeuristic(rnd_state, rnd_order)
+	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
+	start = WarehouseWithoutHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
 
-	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True)
-	start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True)
+	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = False, isOutputProccesed = True)
+	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = False, isOutputProccesed = False)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 
@@ -154,10 +166,17 @@ if __name__ == "__main__":
 		s.visualization()
 		for a in path:
 			s.apply(a)
-			print(s)
-			s.visualization()    
+			#print(s)
+			print(f"------------ Action: {a} ----------")
+			s.visualization() 
+		print(s)   
 	else:
 		print("NO PATH exists.")
 	
 	print(f"Total expanded nodes: {Warehouse.expanded} Time: {elapsed_t:.2f}")
 
+
+	if sim2file:
+		file.close()
+		sys.stdout = origin_sdtout
+		print("End print to file")
