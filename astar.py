@@ -107,8 +107,8 @@ class AStar():
 			else:
 				closed[state.warehouse] = (action, prev_state)
 			
+			#print(state.warehouse.get_neighbors())
 			for action, neighbor in state.warehouse.get_neighbors():
-				print(state.warehouse.get_neighbors())
 				next_state = State(neighbor, state.cost + 1, 0, (action, state.warehouse))
 				next_state.priority = next_state.cost + self.weigth * next_state.warehouse.heuristic()
 				opened.put(next_state)
@@ -138,13 +138,13 @@ if __name__ == "__main__":
 
 	rnd_order = get_random_orders(N,S)
 	rnd_state = get_random_state(N,S)
-	in_order = get_random_orders(N+10,3,N+1)
+	in_order = get_random_orders(N+10,4,N+1)
 
 	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
 	start = WarehouseWithoutHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
 
 	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = False, isOutputProccesed = True)
-	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = False, isOutputProccesed = False)
+	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 

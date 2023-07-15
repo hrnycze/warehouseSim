@@ -1,128 +1,59 @@
-Searching path: [[6, 4, 9, 10], [7, 3, 5], [1], [2, 8]] 
-Input: (16, 20, 19) Output: [] Orders: (4, 5, 2, 3) Done: False -> for order (4, 5, 2, 3)
-[((16, 6), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727A90>), ((16, 7), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727BB0>), ((16, 1), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727BE0>), ((16, 2), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727C10>)]
-[((16, 6), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727C10>), ((16, 7), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727B80>), ((16, 1), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727C70>), ((16, 2), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727CA0>)]
-[((16, 6), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727CA0>), ((16, 7), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727C40>), ((16, 1), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727D00>), ((16, 2), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727D30>)]
-[((16, 6), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727D30>), ((16, 7), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727CD0>), ((16, 1), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727D90>), ((16, 2), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727DC0>)]
-[((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727D60>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727E20>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727E80>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727EE0>)]
-[((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727EE0>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727F40>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727F70>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727FA0>)]
-[((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727FA0>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727FD0>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x0000022218770040>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x0000022218770070>)]
-[((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C070>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C0A0>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C0D0>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C100>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C160>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C190>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C1C0>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C1F0>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C1F0>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C220>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C250>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C280>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C280>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C2B0>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C2E0>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C310>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C310>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C340>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C370>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C3A0>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C400>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C430>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C490>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C4F0>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C4F0>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C550>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C580>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C5B0>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C5B0>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C5E0>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C610>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C640>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C640>), ((20, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C670>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C6A0>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C6D0>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C730>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C760>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C7C0>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C820>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C820>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C880>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C8B0>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C8E0>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C8E0>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C910>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C940>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C970>)]
-[((20, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C970>), ((20, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C9A0>), ((20, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C9D0>), ((20, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CA00>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CA60>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CA90>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CAC0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CAF0>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CAF0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CB20>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CB50>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CB80>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CB80>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CBB0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CBE0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CC10>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CC10>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CC40>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CC70>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CCA0>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CD00>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CD30>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CD60>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CD90>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CD90>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CDC0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CDF0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CE20>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727D00>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727DF0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727E80>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727F70>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x0000022218727F70>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CD90>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CDC0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CDF0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C040>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C130>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C250>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C3D0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C3D0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C580>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C610>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C700>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C700>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C7C0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C8B0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C940>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C940>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CA30>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CAC0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CB50>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CCD0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CD60>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CE50>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CE80>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CE80>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CEB0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CEE0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CF10>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CF10>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CF40>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CF70>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CFA0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CFA0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CFD0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D000>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D030>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D090>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D0C0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D120>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D180>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D180>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D1E0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D210>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D240>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D240>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D270>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D2A0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D2D0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D2D0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D300>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D330>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D360>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D3C0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D3F0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D450>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D4B0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D4B0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D510>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D540>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D570>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D570>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D5A0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D5D0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D600>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D600>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D630>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D660>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D690>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D6F0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D720>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D780>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D7E0>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D7E0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D840>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D870>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D8A0>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D8A0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D8D0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D900>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D930>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D930>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D960>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D990>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D9C0>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DA20>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DA50>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DAB0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DB10>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DB10>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DB70>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DBA0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DBD0>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DBD0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DC00>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DC30>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DC60>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DC00>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DC30>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DC60>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CE20>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C610>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C8B0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CBE0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CE50>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CE50>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CEE0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CF70>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D060>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D060>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D120>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D210>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D2A0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D2A0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D390>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D450>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D540>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D6C0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D780>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D900>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DAB0>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DAB0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DC90>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DCC0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DCF0>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DCF0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DD20>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DD50>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DD80>)]
-[((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DD80>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DDB0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DDE0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DE10>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DE70>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DEA0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DED0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DF00>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DF00>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DF30>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DF60>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DF90>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DF90>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DFC0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DFF0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E020>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E020>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E050>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E080>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E0B0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E110>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E140>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E1A0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E200>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E200>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E260>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E290>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E2C0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E2C0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E2F0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E320>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E350>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E350>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E380>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E3B0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E3E0>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E440>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E470>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E4D0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E530>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E530>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E590>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E5C0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E5F0>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E5F0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E620>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E650>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E680>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E680>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E6B0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E6E0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E710>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E770>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E7A0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E800>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E860>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E860>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E8C0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E8F0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E920>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E920>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E950>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E980>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E9B0>)]
-[((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E9B0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E9E0>), ((19, 1), <__main__.WarehouseWithoutHeuristic object at 0x000002221876EA10>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876EA40>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876C250>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CBE0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876CF70>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D210>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D210>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D5D0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876D900>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DCC0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DCC0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DD50>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DE40>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DED0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DED0>), ((19, 7), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DF60>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876DFF0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E0E0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E290>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E320>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E410>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E4D0>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E4D0>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E5C0>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E650>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E740>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E740>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E800>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E8F0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E980>)]
-[((19, 6), <__main__.WarehouseWithoutHeuristic object at 0x000002221876E980>), ((19, 20), <__main__.WarehouseWithoutHeuristic object at 0x000002221876EA70>), ((19, 16), <__main__.WarehouseWithoutHeuristic object at 0x000002221876EAA0>), ((19, 2), <__main__.WarehouseWithoutHeuristic object at 0x000002221876EAD0>)]
-Found a path (length=3): 
-[(16, 6), (20, 1), (19, 2)]
+Searching path: [[10, 2, 8], [1, 7, 4, 3, 9, 5], [6], []] 
+Input: (20, 19, 15, 11) Output: [] Orders: (4, 3, 7, 8) Done: False -> for order (4, 3, 7, 8)
+Found a path (length=4): 
+[(20, 10), (19, 6), (15, 0), (11, 15)]
 How it goes: 
-[[6, 4, 9, 10], [7, 3, 5], [1], [2, 8]] 
-Input: (16, 20, 19) Output: [] Orders: (4, 5, 2, 3) Done: False
+[[10, 2, 8], [1, 7, 4, 3, 9, 5], [6], []] 
+Input: (20, 19, 15, 11) Output: [] Orders: (4, 3, 7, 8) Done: False
 
-                          |6|        
-  |16|              |7|   |4|        
-  |20|  |2|         |3|   |9|        
-  |19|  |8|   |1|   |5|   |10|       
+                    |1|              
+                    |7|              
+  |20|              |4|              
+  |19|              |3|   |10|       
+  |15|              |9|   |2|        
+  |11|        |6|   |5|   |8|        
 ''####''^^^^''^^^^''^^^^''^^^^''****''
 [input]                       [output]
------------- Action: (16, 6) ----------
+------------ Action: (20, 10) ----------
 
-                          |16|       
-                          |6|        
-                    |7|   |4|        
-  |20|  |2|         |3|   |9|        
-  |19|  |8|   |1|   |5|   |10|       
+                    |1|              
+                    |7|              
+                    |4|   |20|       
+  |19|              |3|   |10|       
+  |15|              |9|   |2|        
+  |11|        |6|   |5|   |8|        
 ''####''^^^^''^^^^''^^^^''^^^^''****''
 [input]                       [output]
------------- Action: (20, 1) ----------
+------------ Action: (19, 6) ----------
 
-                          |16|       
-                          |6|        
-                    |7|   |4|        
-        |2|   |20|  |3|   |9|        
-  |19|  |8|   |1|   |5|   |10|       
+                    |1|              
+                    |7|              
+                    |4|   |20|       
+                    |3|   |10|       
+  |15|        |19|  |9|   |2|        
+  |11|        |6|   |5|   |8|        
 ''####''^^^^''^^^^''^^^^''^^^^''****''
 [input]                       [output]
------------- Action: (19, 2) ----------
+------------ Action: (15, 0) ----------
 
-                          |16|       
-                          |6|        
-        |19|        |7|   |4|        
-        |2|   |20|  |3|   |9|        
-        |8|   |1|   |5|   |10|       
+                    |1|              
+                    |7|              
+                    |4|   |20|       
+                    |3|   |10|       
+              |19|  |9|   |2|        
+  |11|  |15|  |6|   |5|   |8|        
 ''####''^^^^''^^^^''^^^^''^^^^''****''
 [input]                       [output]
-[[16, 6, 4, 9, 10], [7, 3, 5], [20, 1], [19, 2, 8]] 
-Input: [] Output: [] Orders: (4, 5, 2, 3) Done: True
-Total expanded nodes: 105 Time: 0.03
+------------ Action: (11, 15) ----------
+
+                    |1|              
+                    |7|              
+                    |4|   |20|       
+                    |3|   |10|       
+        |11|  |19|  |9|   |2|        
+        |15|  |6|   |5|   |8|        
+''####''^^^^''^^^^''^^^^''^^^^''****''
+[input]                       [output]
+[[20, 10, 2, 8], [1, 7, 4, 3, 9, 5], [19, 6], [11, 15]] 
+Input: [] Output: [] Orders: (4, 3, 7, 8) Done: True
+Total expanded nodes: 85 Time: 0.04

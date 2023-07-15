@@ -58,8 +58,6 @@ class Warehouse():
           self.isInputProccesed = isInputProccesed
           self.isOutputProccesed =  isOutputProccesed
 
-    def apply_from_input():
-         return None
 
     def apply(self, action):
          what, where = action
@@ -71,7 +69,7 @@ class Warehouse():
          stack_from, stack_from_id = None, None
 
          if self.isInputProccesed and not self.isGoalInput() and what == self.input[0]:
-              stack_from_id = -1
+              stack_from_id = -2
          else:
               stack_from, stack_from_id = _find_stack(self.state, what)
 
@@ -92,7 +90,7 @@ class Warehouse():
                 return
 
          #move object
-         if stack_from_id != -1:
+         if stack_from_id != -2:
             self.state[stack_from_id] = np.delete(stack_from,0)
          else:
             self.input = np.delete(self.input, 0)
