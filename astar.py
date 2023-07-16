@@ -1,6 +1,7 @@
 from warehouse import Warehouse, get_random_orders, get_random_state
 from queue import PriorityQueue
 import time
+from pympler import asizeof
 
 class WarehouseWithoutHeuristic(Warehouse):
 	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
@@ -35,13 +36,7 @@ class WarehouseHeuristic2(WarehouseHeuristic):
 		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)	
 
 	def heuristic(self):
-		curr_state = self.get_state()
-		goal_order = self.get_goal_output()
-
-		heur = 0
-		for goal_val in goal_order:
-			heur += self.find_pos_in_stack(goal_val,curr_state) - 1
-			heur += len(self.get_goal_output()) - len(self.get_curr_output())
+		heur = len(self.get_goal_output()) - len(self.get_curr_output())
 	
 		return heur
 	
@@ -55,8 +50,7 @@ class WarehouseHeuristicInput(WarehouseHeuristic):
 
 		heur = 0
 		for goal_val in goal_order:
-			heur += self.find_pos_in_stack(goal_val,curr_state) - 1
-			heur += len(self.get_goal_output()) - len(self.get_curr_output())
+			heur += self.find_pos_in_stack(goal_val,curr_state)
 		
 		heur += len(self.input)
 	
@@ -70,8 +64,8 @@ class State():
 		self.priority = priority # priority queue
 		self.history = history 
 
-	def copy(self):
-		return State(self.warehouse.clone(), self.cost, self.priority, self.history)
+	# def copy(self):
+	# 	return State(self.warehouse.clone(), self.cost, self.priority, self.history)
 
 	def __lt__(self, other): # Overrides "<" operator, needed in PriorityQueue.
 		return self.priority < other.priority
@@ -83,7 +77,8 @@ class AStar():
 		self.weigth = weigth
 
 	def search(self, start):
-		# Return a optimal sequence of actions that takes from start to goal.
+		""" Return a optimal sequence of actions
+        that takes from start to goal. """
 
 		opened = PriorityQueue()
 		closed = {}
@@ -92,6 +87,7 @@ class AStar():
 	
 		while not opened.empty():
 			state = opened.get()
+			print(f"size of state: {asizeof.asizeof(state)}")
 			#print(state)
 			action, prev_state = state.history
 			if state.warehouse.isDone():
@@ -131,20 +127,20 @@ if __name__ == "__main__":
 	
 	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
 
-	N = 10#number of box in warehouse
+	N = 2000 #number of box in warehouse
 	S = 4 #size of warehouse (num_stack)
 	
 	order = (2,1) #sequence of box to go out 
 
-	rnd_order = get_random_orders(N,S)
+	rnd_order = get_random_orders(N,S+1)
 	rnd_state = get_random_state(N,S)
-	in_order = get_random_orders(N+10,4,N+1)
+	in_order = get_random_orders(N+10,3,N+1)
 
 	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
-	start = WarehouseWithoutHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
+	#start = WarehouseWithoutHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
 
-	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = False, isOutputProccesed = True)
-	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
+	start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = False, isOutputProccesed = True)
+	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = True)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 
@@ -165,7 +161,7 @@ if __name__ == "__main__":
 		print(s)
 		s.visualization()
 		for a in path:
-			s.apply(a)
+			s.move(a)
 			#print(s)
 			print(f"------------ Action: {a} ----------")
 			s.visualization() 
@@ -175,6 +171,9 @@ if __name__ == "__main__":
 	
 	print(f"Total expanded nodes: {Warehouse.expanded} Time: {elapsed_t:.2f}")
 
+	# from pympler import asizeof
+
+	print(f"size of state: {asizeof.asizeof(s)}")
 
 	if sim2file:
 		file.close()
