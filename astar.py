@@ -2,24 +2,43 @@ from warehouse import Warehouse, get_random_orders, get_random_state
 from queue import PriorityQueue
 import time
 from pympler import asizeof
+import numpy as np
+
+def find_pos_in_stack(num, warehouse):
+	"""return (num of box above finded box plus 1, index of stack)"""
+	for i,stack in enumerate(warehouse):
+		for j,val in enumerate(stack):
+			if val == num:
+				return (j + 1, i) 
+	return (0, -1)
+
+def heuristic_order(order, warehouse):
+	q = PriorityQueue()
+	for o in order:
+		cost = find_pos_in_stack(o, warehouse)
+		q.put((cost, o))
+	new_order = []
+	while not q.empty():
+		new_order.append(q.get()[1])
+
+	return tuple(new_order)
 
 class WarehouseWithoutHeuristic(Warehouse):
-	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
-		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)
+	def __init__(self, inicial_state, out_order=None, in_order=None,
+                   isInputProccesed = False, isOutputProccesed = True,
+                   max_stack_items = 300):
+		super().__init__(inicial_state, out_order, in_order,
+		    isInputProccesed, isOutputProccesed, max_stack_items)
 	
 	def heuristic(self):
 		return 0
 
 class WarehouseHeuristic(Warehouse):
-	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
-		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)	
-
-	def find_pos_in_stack(self, num, warehouse):
-		for i,stack in enumerate(warehouse):
-			for j,val in enumerate(stack):
-				if val == num:
-					return j + 1 # ret num of box above finded box plus 1
-		return 0
+	def __init__(self, inicial_state, out_order=None, in_order=None,
+                   isInputProccesed = False, isOutputProccesed = True,
+                   max_stack_items = 300):
+		super().__init__(inicial_state, out_order, in_order,
+		    isInputProccesed, isOutputProccesed, max_stack_items)	
 
 	def heuristic(self):
 		curr_state = self.get_state()
@@ -27,22 +46,72 @@ class WarehouseHeuristic(Warehouse):
 
 		heur = 0
 		for goal_val in goal_order:
-			heur += self.find_pos_in_stack(goal_val,curr_state)
+			heur += find_pos_in_stack(goal_val,curr_state)[0]
 			
 		return heur
 	
-class WarehouseHeuristic2(WarehouseHeuristic):
-	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
-		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)	
+class WarehouseHeuristic3(Warehouse):
+	def __init__(self, inicial_state, out_order=None, in_order=None,
+                   isInputProccesed = False, isOutputProccesed = True,
+                   max_stack_items = 300):
+		super().__init__(inicial_state, out_order, in_order,
+		    isInputProccesed, isOutputProccesed, max_stack_items)	
+
+	def heuristic(self):
+		curr_state = self.get_state()
+		goal_order = self.get_goal_output()
+
+		heur = 0
+
+		heur += find_pos_in_stack(goal_order[0],curr_state)[0]
+			
+		heur += len(self.get_goal_output()) - len(self.get_curr_output())	
+		return heur
+	
+class WarehouseHeuristic4(Warehouse):
+	def __init__(self, inicial_state, out_order=None, in_order=None,
+                   isInputProccesed = False, isOutputProccesed = True,
+                   max_stack_items = 300):
+		super().__init__(inicial_state, out_order, in_order,
+		    isInputProccesed, isOutputProccesed, max_stack_items)	
+
+	def heuristic(self):
+		curr_state = self.get_state()
+		goal_order = self.get_goal_output()
+
+		heur = 0
+		heur_stacks = np.zeros(len(curr_state), dtype=np.int32)
+
+		for goal_val in goal_order:
+			val, idx = find_pos_in_stack(goal_val,curr_state)
+			if idx == -1:
+				continue
+			heur_stacks[idx] = np.max([heur_stacks[idx], val-1])
+			
+		heur = np.sum(heur_stacks)
+
+		heur += len(self.get_goal_output()) - len(self.get_curr_output())
+
+		return heur
+	
+class WarehouseHeuristic2(Warehouse):
+	def __init__(self, inicial_state, out_order=None, in_order=None,
+                   isInputProccesed = False, isOutputProccesed = True,
+                   max_stack_items = 300):
+		super().__init__(inicial_state, out_order, in_order,
+		    isInputProccesed, isOutputProccesed, max_stack_items)
 
 	def heuristic(self):
 		heur = len(self.get_goal_output()) - len(self.get_curr_output())
 	
 		return heur
 	
-class WarehouseHeuristicInput(WarehouseHeuristic):
-	def __init__(self, start_state=None, order=None, in_order=None, isInputProccesed = False, isOutputProccesed=True):
-		super().__init__(start_state, order, in_order, isInputProccesed, isOutputProccesed)	
+class WarehouseHeuristicInput(Warehouse):
+	def __init__(self, inicial_state, out_order=None, in_order=None,
+                   isInputProccesed = False, isOutputProccesed = True,
+                   max_stack_items = 300):
+		super().__init__(inicial_state, out_order, in_order,
+		    isInputProccesed, isOutputProccesed, max_stack_items)
 
 	def heuristic(self):
 		curr_state = self.get_state()
@@ -50,7 +119,7 @@ class WarehouseHeuristicInput(WarehouseHeuristic):
 
 		heur = 0
 		for goal_val in goal_order:
-			heur += self.find_pos_in_stack(goal_val,curr_state)
+			heur += find_pos_in_stack(goal_val,curr_state)[0]
 		
 		heur += len(self.input)
 	
@@ -87,7 +156,7 @@ class AStar():
 	
 		while not opened.empty():
 			state = opened.get()
-			print(f"size of state: {asizeof.asizeof(state)}")
+			#print(f"size of state: {asizeof.asizeof(state)}")
 			#print(state)
 			action, prev_state = state.history
 			if state.warehouse.isDone():
@@ -116,35 +185,41 @@ class AStar():
 if __name__ == "__main__":
 	import sys
 
+	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
+
+	N = 200 #number of box in warehouse
+	S = 4 #size of warehouse (num_stack)
+	
+	order = (2,1) #sequence of box to go out 
+
+	rnd_order = get_random_orders(N,S+2)
+	rnd_state = get_random_state(N,S)
+	in_order = get_random_orders(N+10,3,N+1)
+
+	heur_order = heuristic_order(rnd_order, rnd_state)
+
+	print(f"rnd {rnd_order} heur {heur_order}")
+
+	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
+	#start = WarehouseWithoutHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
+
+	start = WarehouseHeuristic4(rnd_state, heur_order, in_order, isInputProccesed = False, isOutputProccesed = True, max_stack_items = 400)
+	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = True)
+
+	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
+
+	astar = AStar(1.5)
+
+	print(start)
+	start.visualization()
+
 	sim2file = True
 	origin_sdtout = sys.stdout
 	if sim2file:
 		print("Start print to file")
 		file = open("doc/simulation.txt", "w")
 		sys.stdout = file
-		
-	
-	
-	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
 
-	N = 2000 #number of box in warehouse
-	S = 4 #size of warehouse (num_stack)
-	
-	order = (2,1) #sequence of box to go out 
-
-	rnd_order = get_random_orders(N,S+1)
-	rnd_state = get_random_state(N,S)
-	in_order = get_random_orders(N+10,3,N+1)
-
-	#start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
-	#start = WarehouseWithoutHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = False)
-
-	start = WarehouseHeuristic(rnd_state, rnd_order, in_order, isInputProccesed = False, isOutputProccesed = True)
-	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = True)
-
-	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
-
-	astar = AStar(1.1)
 
 	start_t = time.time()
 	path = astar.search(start)
@@ -173,7 +248,7 @@ if __name__ == "__main__":
 
 	# from pympler import asizeof
 
-	print(f"size of state: {asizeof.asizeof(s)}")
+	#print(f"size of state: {asizeof.asizeof(s)}")
 
 	if sim2file:
 		file.close()

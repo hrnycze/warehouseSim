@@ -5,19 +5,19 @@ def get_random_orders(num_obj, num_orders, num_from=1):
      return tuple(np.random.choice(obj,num_orders, replace=False))
 
 
-def get_random_state(num_obj, num_stack):
+def get_random_state(num_obj, num_stack, max_stack_items = 100):
      stacks = []
      obj = np.arange(1, num_obj+1)
 
      while len(obj) > 0:
-          stack_len = np.random.randint(1, len(obj)+1)
+          stack_len = np.random.randint(1, np.min([len(obj)+1, max_stack_items]))
           stack = np.random.choice(obj, stack_len, replace=False)
 
-          if len(stacks) < num_stack:
+          if len(stacks) < num_stack and stack_len <= max_stack_items:
                stacks.append(stack)
           else:
                for o in stack:
-                    rand_stack_id = np.random.randint(0,num_stack)
+                    rand_stack_id = np.random.randint(0, len(stacks))
                     stacks[rand_stack_id] = np.insert(stacks[rand_stack_id],0,o)
 
           obj = np.setdiff1d(obj, stack)
@@ -43,7 +43,8 @@ class Warehouse():
      expanded = 0
 
      def __init__(self, inicial_state, out_order=None, in_order=None,
-                   isInputProccesed = False, isOutputProccesed = True):
+                   isInputProccesed = False, isOutputProccesed = True,
+                   max_stack_items = 300):
           self.state = inicial_state
 
           self.input = in_order
@@ -52,6 +53,7 @@ class Warehouse():
           self.required_order = out_order
           self.isInputProccesed = isInputProccesed
           self.isOutputProccesed = isOutputProccesed
+          self.max_stack_items = max_stack_items
 
      def move(self, move):
           from_id, to_id = move
@@ -93,7 +95,7 @@ class Warehouse():
                for to_id, to_stack in enumerate(self.state):
                     if to_stack.size == 0 and ((INPUT_ID, GROUND_ID) not in moves):
                          moves.append((INPUT_ID, GROUND_ID))
-                    elif to_stack.size != 0:
+                    elif to_stack.size > 0 and to_stack.size < self.max_stack_items:
                          moves.append((INPUT_ID, to_id))
 
           if self.isOutputProccesed:
@@ -113,12 +115,13 @@ class Warehouse():
                          if from_id == to_id:
                               continue
 
-                         if len(from_stack) > 1 and to_stack.size == 0 and ((from_id, 0) not in moves):
+                         if len(from_stack) > 1 and to_stack.size == 0 and ((from_id, GROUND_ID) not in moves):
                               # move object from top of from_stack to ground
                               moves.append((from_id, GROUND_ID)) 
                               continue
-
-                         moves.append((from_id, to_id))
+                         
+                         if to_stack.size > 0 and to_stack.size < self.max_stack_items:
+                              moves.append((from_id, to_id))
 
           return moves
      
@@ -171,6 +174,7 @@ class Warehouse():
           warehouse.required_order = self.required_order
           warehouse.isInputProccesed = self.isInputProccesed
           warehouse.isOutputProccesed = self.isOutputProccesed
+          warehouse.max_stack_items = self.max_stack_items
 
           return warehouse
 
@@ -240,13 +244,13 @@ if __name__ == "__main__":
     # rndState = _get_random_state(6,3)
     # print(rndState)
     # print(frozenset(tuple(o) for o in rndState))
-    N = 20 #number of box in warehouse
+    N = 9 #number of box in warehouse
     S = 4 #size of warehouse (num_stack)
 
     state = get_random_state(N,S)
     out_order = get_random_orders(N,S)
     in_order = get_random_orders(N+3,3,N+1)
-    wh = Warehouse(state, out_order, in_order, isInputProccesed=True, isOutputProccesed=True)
+    wh = Warehouse(state, out_order, in_order, isInputProccesed=True, isOutputProccesed=True, max_stack_items=10)
     
 
     while True:
