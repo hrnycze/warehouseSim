@@ -1,17 +1,33 @@
 import copy, numpy as np
 
-def get_random_orders(num_obj, num_orders, num_from=1):
-     obj = np.arange(num_from, num_obj+1)
-     return tuple(np.random.choice(obj,num_orders, replace=False))
+def get_random_orders(num_obj, num_orders, num_from=1, num_type = None):
+     if num_type == None:
+          obj = np.arange(num_from, num_obj+1)
+          duplicities = False
+     else:
+          obj = np.arange(1, num_type+1)
+          duplicities = True
+     return tuple(np.random.choice(obj,num_orders, replace=duplicities))
 
 
-def get_random_state(num_obj, num_stack, max_stack_items = 100):
+def get_random_state(num_obj, num_stack, max_stack_items = 100, num_type = None):
+
+     if num_type == None:
+          obj = np.arange(1, num_obj+1)
+          duplicities = False
+     else:
+          obj = np.array([num_obj])
+          duplicities = True
+     
      stacks = []
-     obj = np.arange(1, num_obj+1)
 
-     while len(obj) > 0:
-          stack_len = np.random.randint(1, np.min([len(obj)+1, max_stack_items]))
-          stack = np.random.choice(obj, stack_len, replace=False)
+     while (obj.size==1 and obj[0]>0) or obj.size > 1:
+          if num_type == None:
+               stack_len = np.random.randint(1, np.min([len(obj)+1, max_stack_items]))
+               stack = np.random.choice(obj, stack_len, replace=duplicities)
+          else:
+               stack_len = np.random.randint(1, np.min([obj[0]+1, max_stack_items]))
+               stack = np.random.choice(np.arange(1, num_type+1), stack_len, replace=duplicities)
 
           if len(stacks) < num_stack and stack_len <= max_stack_items:
                stacks.append(stack)
@@ -20,7 +36,10 @@ def get_random_state(num_obj, num_stack, max_stack_items = 100):
                     rand_stack_id = np.random.randint(0, len(stacks))
                     stacks[rand_stack_id] = np.insert(stacks[rand_stack_id],0,o)
 
-          obj = np.setdiff1d(obj, stack)
+          if num_type == None:
+               obj = np.setdiff1d(obj, stack)
+          else:
+               obj[0] -= stack_len
 
      # add empty stack to assure full warehouse
      if len(stacks) < num_stack:
@@ -41,6 +60,7 @@ INPUT_ID = -3
 
 class Warehouse():
      expanded = 0
+     expanded2 = 0
 
      def __init__(self, inicial_state, out_order=None, in_order=None,
                    isInputProccesed = False, isOutputProccesed = True,
@@ -87,8 +107,6 @@ class Warehouse():
 
 
      def get_moves(self):
-          Warehouse.expanded += 1
-
           moves = []
 
           if self.isInputProccesed and self.input is not None and len(self.input) > 0:
@@ -104,10 +122,10 @@ class Warehouse():
                     if from_stack.size == 0:
                          continue
 
-                    object_a = from_stack[0] # object from top of stack 
+                    object = from_stack[0] # object from top of stack 
                     
                     #object_a is in order as next item
-                    if self.output.size < len(self.required_order) and object_a == self.required_order[-self.output.size - 1]: 
+                    if self.output.size < len(self.required_order) and object == self.required_order[-self.output.size - 1]: 
                          # move object from top of from_stack to output
                          moves.append((from_id, OUTPUT_ID)) 
 
@@ -126,6 +144,7 @@ class Warehouse():
           return moves
      
      def get_neighbors(self):
+          Warehouse.expanded += 1
           neighbors = []
 
           for a in self.get_moves():
@@ -146,11 +165,11 @@ class Warehouse():
           return self.required_order
      
      def isGoalOutput(self):
-          """ input position must be empty """
+          """ output is equal to required order """
           return self.get_curr_output() == self.get_goal_output()
      
      def isGoalInput(self):
-          """ output is equal required order """
+          """ input position must be empty """
           return len(self.input)==0
 
      def isDone(self):
@@ -244,13 +263,14 @@ if __name__ == "__main__":
     # rndState = _get_random_state(6,3)
     # print(rndState)
     # print(frozenset(tuple(o) for o in rndState))
-    N = 9 #number of box in warehouse
+    N = 20 #number of box in warehouse
     S = 4 #size of warehouse (num_stack)
 
-    state = get_random_state(N,S)
-    out_order = get_random_orders(N,S)
+    state = get_random_state(N,S, 100, 5)
+    #out_order = get_random_orders(N,S, 1, 5)
+    out_order = tuple(np.random.choice([id for stack in state for id in stack], S, replace=False))
     in_order = get_random_orders(N+3,3,N+1)
-    wh = Warehouse(state, out_order, in_order, isInputProccesed=True, isOutputProccesed=True, max_stack_items=10)
+    wh = Warehouse(state, out_order, in_order, isInputProccesed=False, isOutputProccesed=True, max_stack_items=10)
     
 
     while True:
