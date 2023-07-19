@@ -61,7 +61,21 @@ def heuristic_order(order, warehouse):
 	while not q.empty():
 		new_order.append(q.get()[1])
 
-	return tuple(new_order)
+	return tuple(reversed(new_order))
+
+def heuristic_duplicities_order(order, warehouse):
+	q = PriorityQueue()
+
+	values, counts = np.unique(order, return_counts=True)
+	for v,c in zip(values,counts):
+		all_pos = find_first_n_best_pos_in_stack(v,warehouse, c)
+		for cost in all_pos:
+			q.put((cost[0], v))
+	new_order = []
+	while not q.empty():
+		new_order.append(q.get()[1])
+
+	return tuple(reversed(new_order))
 
 class WarehouseHeuristicDuplicities(Warehouse):
 	def __init__(self, inicial_state, out_order=None, in_order=None,
@@ -101,7 +115,7 @@ class WarehouseHeuristicDuplicities2(Warehouse):
 		for v,c in zip(values,counts):
 			all_pos = find_all_best_pos_in_stack(v,curr_state)
 			heur += np.sum(all_pos[:c])
-			print(f"v:{v} c:{c} pos: {all_pos} heur:{np.sum(all_pos[:c])}")
+			#print(f"v:{v} c:{c} pos: {all_pos} heur:{np.sum(all_pos[:c])}")
 			
 		heur += out_diff
 		return heur
@@ -251,7 +265,7 @@ class AStar():
 	def __init__(self, weigth=1):
 		self.weigth = weigth
 
-	def search(self, start):
+	def search(self, start, s_time = 0, timeout = np.inf):
 		""" Return a optimal sequence of actions
         that takes from start to goal. """
 
@@ -260,7 +274,7 @@ class AStar():
 		state = State(start.clone())
 		opened.put(state)
 	
-		while not opened.empty():
+		while not opened.empty() and time.time()-s_time < timeout:
 			state = opened.get()
 			#print(f"size of state: {asizeof.asizeof(state)}")
 			#print(state)
@@ -294,17 +308,16 @@ if __name__ == "__main__":
 
 	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
 
-	N = 200 #number of box in warehouse
+	N = 400 #number of box in warehouse
 	S = 4 #size of warehouse (num_stack)
-	
-	order = (2,1) #sequence of box to go out 
 
 	rnd_state = get_random_state(N,S, max_stack_items=100, num_type=10)
 	rnd_order = tuple(np.random.choice([id for stack in rnd_state for id in stack], 10, replace=False))
 	#rnd_order = get_random_orders(N,S, num_from=1, num_type=5)
 	in_order = get_random_orders(N+10,3,N+1)
 
-	heur_order = heuristic_order(rnd_order, rnd_state)
+	#heur_order = heuristic_order(rnd_order, rnd_state)
+	heur_order = heuristic_duplicities_order(rnd_order, rnd_state)
 
 	print(f"rnd {rnd_order} heur {heur_order}")
 
@@ -315,7 +328,7 @@ if __name__ == "__main__":
 	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = True)
 
 
-	start = WarehouseHeuristicDuplicities3(rnd_state, rnd_order, in_order, isInputProccesed = False, isOutputProccesed = True, max_stack_items=200)
+	start = WarehouseHeuristicDuplicities3(rnd_state, heur_order, in_order, isInputProccesed = False, isOutputProccesed = True, max_stack_items=150)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 

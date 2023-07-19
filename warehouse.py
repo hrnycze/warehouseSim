@@ -60,7 +60,6 @@ INPUT_ID = -3
 
 class Warehouse():
      expanded = 0
-     expanded2 = 0
 
      def __init__(self, inicial_state, out_order=None, in_order=None,
                    isInputProccesed = False, isOutputProccesed = True,
