@@ -173,25 +173,7 @@ class WarehouseHeuristic(Warehouse):
 			
 		return heur
 	
-class WarehouseHeuristic3(Warehouse):
-	def __init__(self, inicial_state, out_order=None, in_order=None,
-                   isInputProccesed = False, isOutputProccesed = True,
-                   max_stack_items = 300):
-		super().__init__(inicial_state, out_order, in_order,
-		    isInputProccesed, isOutputProccesed, max_stack_items)	
-
-	def heuristic(self):
-		curr_state = self.get_state()
-		goal_order = self.get_goal_output()
-
-		heur = 0
-
-		heur += find_pos_in_stack(goal_order[0],curr_state)[0]
-			
-		heur += len(self.get_goal_output()) - len(self.get_curr_output())	
-		return heur
-	
-class WarehouseHeuristic4(Warehouse):
+class WarehouseHeuristic2(Warehouse):
 	def __init__(self, inicial_state, out_order=None, in_order=None,
                    isInputProccesed = False, isOutputProccesed = True,
                    max_stack_items = 300):
@@ -217,17 +199,6 @@ class WarehouseHeuristic4(Warehouse):
 
 		return heur
 	
-class WarehouseHeuristic2(Warehouse):
-	def __init__(self, inicial_state, out_order=None, in_order=None,
-                   isInputProccesed = False, isOutputProccesed = True,
-                   max_stack_items = 300):
-		super().__init__(inicial_state, out_order, in_order,
-		    isInputProccesed, isOutputProccesed, max_stack_items)
-
-	def heuristic(self):
-		heur = len(self.get_goal_output()) - len(self.get_curr_output())
-	
-		return heur
 	
 class WarehouseHeuristicInput(Warehouse):
 	def __init__(self, inicial_state, out_order=None, in_order=None,
@@ -308,11 +279,11 @@ if __name__ == "__main__":
 
 	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
 
-	N = 400 #number of box in warehouse
+	N = 40 #number of box in warehouse
 	S = 4 #size of warehouse (num_stack)
 
-	rnd_state = get_random_state(N,S, max_stack_items=100, num_type=10)
-	rnd_order = tuple(np.random.choice([id for stack in rnd_state for id in stack], 10, replace=False))
+	rnd_state = get_random_state(N,S, max_stack_items=100)
+	rnd_order = tuple(np.random.choice([id for stack in rnd_state for id in stack], 3, replace=False))
 	#rnd_order = get_random_orders(N,S, num_from=1, num_type=5)
 	in_order = get_random_orders(N+10,3,N+1)
 

@@ -3,14 +3,13 @@ from warehouse import *
 import sys
 
 if __name__ == "__main__":
-
-    for order_size in range(1, 11):
-        for i in range(1,11):
+    for order_size in range(2, 6):
+        for i in range(1,6):
             print(f"{order_size}/10 {i}/10")
 
             sim2file = True
             if sim2file:
-                f = open("dupliStats3.txt", "a")
+                f = open("uniqStats.txt", "a")
                 print("Start print to file")
             else:
                 f = sys.stdout
@@ -18,22 +17,26 @@ if __name__ == "__main__":
 
             N = 400 #number of box in warehouse
             S = 4 #size of warehouse (num_stack)
-            #rder_size = 9
+            #order_size = 2
 
-            rnd_state = get_random_state(N,S, max_stack_items=100, num_type=10)
+            rnd_state = get_random_state(N,S, max_stack_items=100)
             rnd_order = tuple(np.random.choice([id for stack in rnd_state for id in stack], order_size, replace=False))
 
             heur_order = heuristic_duplicities_order(rnd_order, rnd_state)
 
-            #h1 = WarehouseHeuristicDuplicities(rnd_state, rnd_order, [],False,True,200)
-            h2 = WarehouseHeuristicDuplicities2(rnd_state, rnd_order, [],False,True,200)
-            h3 = WarehouseHeuristicDuplicities3(rnd_state, rnd_order, [],False,True,200)
+            h1 = WarehouseHeuristic(rnd_state, rnd_order, [],False,True,200)
+            h2 = WarehouseHeuristic2(rnd_state, rnd_order, [],False,True,200)
+            
+
+            # h1 = WarehouseHeuristicDuplicities(rnd_state, rnd_order, [],False,True,200)
+            # h2 = WarehouseHeuristicDuplicities2(rnd_state, rnd_order, [],False,True,200)
+            # h3 = WarehouseHeuristicDuplicities3(rnd_state, rnd_order, [],False,True,200)
 
             
             astar = AStar(1)
-            timeout = 120
+            timeout = 60
 
-            heuristics = [h2, h3]
+            heuristics = [h1, h2]
             stats = []
             for h in heuristics:
                 Warehouse.expanded = 0 # dont forgot reset stats
