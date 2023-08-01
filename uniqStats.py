@@ -3,13 +3,13 @@ from warehouse import *
 import sys
 
 if __name__ == "__main__":
-    for order_size in range(2, 6):
-        for i in range(1,6):
+    for order_size in range(5, 11):
+        for i in range(1,11):
             print(f"{order_size}/10 {i}/10")
 
             sim2file = True
             if sim2file:
-                f = open("uniqStats.txt", "a")
+                f = open("uniqStats_2.txt", "a")
                 print("Start print to file")
             else:
                 f = sys.stdout
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
             
             astar = AStar(1)
-            timeout = 60
+            timeout = 800
 
             heuristics = [h1, h2]
             stats = []

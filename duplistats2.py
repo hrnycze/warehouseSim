@@ -4,13 +4,13 @@ import sys
 
 if __name__ == "__main__":
 
-    for order_size in range(1, 11):
+    for order_size in range(11, 16):
         for i in range(1,11):
             print(f"{order_size}/10 {i}/10")
 
             sim2file = True
             if sim2file:
-                f = open("dupliStats3.txt", "a")
+                f = open("dupliStats_h2-h3.txt", "a")
                 print("Start print to file")
             else:
                 f = sys.stdout
@@ -23,7 +23,7 @@ if __name__ == "__main__":
             rnd_state = get_random_state(N,S, max_stack_items=100, num_type=10)
             rnd_order = tuple(np.random.choice([id for stack in rnd_state for id in stack], order_size, replace=False))
 
-            heur_order = heuristic_duplicities_order(rnd_order, rnd_state)
+            #heur_order = heuristic_duplicities_order(rnd_order, rnd_state)
 
             #h1 = WarehouseHeuristicDuplicities(rnd_state, rnd_order, [],False,True,200)
             h2 = WarehouseHeuristicDuplicities2(rnd_state, rnd_order, [],False,True,200)
@@ -31,13 +31,13 @@ if __name__ == "__main__":
 
             
             astar = AStar(1)
-            timeout = 120
+            timeout = 200
 
             heuristics = [h2, h3]
             stats = []
             for h in heuristics:
                 Warehouse.expanded = 0 # dont forgot reset stats
-
+                
                 start_t = time.time()
                 path = astar.search(h, start_t, timeout)
                 end_t = time.time()
@@ -61,12 +61,12 @@ if __name__ == "__main__":
             for sid in range(4):
                 for hid in range(len(heuristics)):
                     if stats[hid] == None: 
-                        print(f" & Timeout {timeout}s", end="", file=f)
+                        print(f" ; Timeout {timeout}s", end="", file=f)
                     else:
                         if sid == 2:
-                            print(f" & {stats[hid][sid]:.3f}", end="", file=f)
+                            print(f" ; {stats[hid][sid]:.3f}", end="", file=f)
                         else:
-                            print(f" & {stats[hid][sid]}", end="", file=f)
+                            print(f" ; {stats[hid][sid]}", end="", file=f)
             print(f" & {[a.tolist() for a in rnd_state]}",file=f)
 
             if sim2file:

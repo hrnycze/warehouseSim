@@ -3,13 +3,13 @@ from warehouse import *
 import sys
 
 if __name__ == "__main__":
-    for order_size in range(1, 11):
-        for i in range(1,11):
+    for order_size in range(10, 21):
+        for i in range(11,31):
             print(f"{order_size}/10 {i}/10")
 
             sim2file = True
             if sim2file:
-                f = open("uniqWeigthStats_h2_4.txt", "a")
+                f = open("dupliWeigthStats_h3_1-15-2-3.txt", "a")
                 print("Start print to file")
             else:
                 f = sys.stdout
@@ -19,32 +19,36 @@ if __name__ == "__main__":
             S = 4 #size of warehouse (num_stack)
             #order_size = 2
 
-            rnd_state = get_random_state(N,S, max_stack_items=100)
+            rnd_state = get_random_state(N,S, max_stack_items=100, num_type=10)
             rnd_order = tuple(np.random.choice([id for stack in rnd_state for id in stack], order_size, replace=False))
 
-            heur_order = heuristic_duplicities_order(rnd_order, rnd_state)
+            #heur_order = heuristic_duplicities_order(rnd_order, rnd_state)
 
             #h1 = WarehouseHeuristic(rnd_state, rnd_order, [],False,True,200)
-            h2 = WarehouseHeuristic2(rnd_state, rnd_order, [],False,True,200)
+            #h2 = WarehouseHeuristic2(rnd_state, rnd_order, [],False,True,200)
             
 
             # h1 = WarehouseHeuristicDuplicities(rnd_state, rnd_order, [],False,True,200)
             # h2 = WarehouseHeuristicDuplicities2(rnd_state, rnd_order, [],False,True,200)
-            # h3 = WarehouseHeuristicDuplicities3(rnd_state, rnd_order, [],False,True,200)
+            h3 = WarehouseHeuristicDuplicities3(rnd_state, rnd_order, [],False,True,200)
 
             
             timeout = 200
 
             #heuristics = [h1, h2]
-            weigth = [1.1, 1.3, 1.5]
+            weigth = [1, 1.5, 2, 3]
             stats = []
             for w in weigth:
                 print(w)
                 Warehouse.expanded = 0 # dont forgot reset stats
-
+                # if w == 1:
+                #     astar = AStar(weigth=1,w_cost=1)
+                # else:
+                #     astar = AStar(weigth=1,w_cost=0)
+                # print(f"w{astar.weigth} wcost{astar.w_cost}")
                 astar = AStar(w)
                 start_t = time.time()
-                path = astar.search(h2, start_t, timeout)
+                path = astar.search(h3, start_t, timeout)
                 end_t = time.time()
                 elapsed_t = end_t - start_t
 

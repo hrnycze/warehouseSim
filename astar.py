@@ -233,8 +233,9 @@ class State():
 		return f"{self.warehouse} action: {self.history[0]} prev: {self.history[1]} cost: {self.cost} priority: {self.priority}"
 
 class AStar():
-	def __init__(self, weigth=1):
+	def __init__(self, weigth=1, w_cost = 1):
 		self.weigth = weigth
+		self.w_cost = w_cost
 
 	def search(self, start, s_time = 0, timeout = np.inf):
 		""" Return a optimal sequence of actions
@@ -266,7 +267,7 @@ class AStar():
 			#print(state.warehouse.get_neighbors())
 			for action, neighbor in state.warehouse.get_neighbors():
 				next_state = State(neighbor, state.cost + 1, 0, (action, state.warehouse))
-				next_state.priority = 1*next_state.cost + self.weigth * next_state.warehouse.heuristic()
+				next_state.priority = self.w_cost*next_state.cost + self.weigth * next_state.warehouse.heuristic()
 				opened.put(next_state)
 				#print(f"{state.warehouse}/{next_state.warehouse}[{action}]")
 				#print(next_state)

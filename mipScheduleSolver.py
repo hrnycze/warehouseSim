@@ -24,7 +24,6 @@ def solve_schedule(num_machines, num_jobs, all_jobs_process_time, showResult = F
         solver.Add(sum((all_jobs_process_time[m,j]*jobs[(j,m)]) for j in all_jobs) <= makespan)
 
     solver.Minimize(makespan)
-
     status = solver.Solve()
 
     if status == pywraplp.Solver.OPTIMAL:
@@ -104,7 +103,7 @@ def create_batch(optimSchedule, startTime):
 
 if __name__ == "__main__":
     num_machines = 3
-    num_jobs = 11
+    num_jobs = 20
     all_jobs_process_time = (np.random.rand(num_jobs,1)*np.ones((1,num_machines))).T
     
     print("Scheduling..")
