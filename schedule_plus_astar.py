@@ -3,7 +3,7 @@ import time
 import numpy as np
 from astar import AStar, WarehouseHeuristic
 from warehouse import Warehouse, get_random_orders, get_random_state
-from mipScheduleSolver import solve_schedule
+from ilpScheduleSolver import solve_schedule
 
 
 if __name__ == "__main__":
