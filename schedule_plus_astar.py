@@ -1,14 +1,14 @@
 import time
 
 import numpy as np
-from astar import AStar, WarehouseHeuristic
+from astar import *
 from warehouse import Warehouse, get_random_orders, get_random_state
 from ilpScheduleSolver import solve_schedule
 
 
 if __name__ == "__main__":
 	
-    N = 100 #number of box in warehouse
+    N = 15 #number of box in warehouse
     S = 4 #size of warehouse (num_stack)
 	
     #order = (2,1) #sequence of box to go out 
@@ -17,19 +17,19 @@ if __name__ == "__main__":
     rnd_state = get_random_state(N,S)
 
     num_machines = 3
-    num_jobs = 5
+    num_jobs = 8
     all_jobs_process_time = (np.random.rand(num_jobs,1)*np.ones((1,num_machines))).T
 
     print("Scheduling..")
     batch = solve_schedule(num_machines, num_jobs, all_jobs_process_time,True)
     print(f"Batch: {batch}")
 
-    start = WarehouseHeuristic(N,S, order=tuple(reversed(batch)), start_state=rnd_state)
+    start = WarehouseHeuristic2(inicial_state=rnd_state, out_order=tuple(reversed(batch)),in_order=[])
 	#start = WarehouseWithoutHeuristic(N,S, rnd_order, rnd_state)
 
     print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 
-    astar = AStar(weigth=1.1)
+    astar = AStar(weigth=1)
 
     start_t = time.time()
     path = astar.search(start)
@@ -44,8 +44,9 @@ if __name__ == "__main__":
         s = start.clone()
         print(s)
         for a in path:
-            s.apply(a)
-            print(s)    
+            s.move(a)
+            #print(s)
+            s.visualization()    
     else:
         print("NO PATH exists.")
 	

@@ -13,7 +13,7 @@ def find_pos_in_stack(num, warehouse):
 	return (0, -1)
 
 def find_best_pos_in_stack(num, warehouse):
-	"""return (num of box above finded box plus 1, index of stack)"""
+	"""return best (num of box above finded box, index of stack)"""
 	best_pos = None, None
 	min_val = np.infty
 	for i,stack in enumerate(warehouse):
@@ -144,6 +144,8 @@ class WarehouseHeuristicDuplicities3(Warehouse):
 		#print(f"heur_stack:{heur_stacks}")
 		heur += np.sum(heur_stacks)	
 		heur += out_diff
+		if self.isInputProccesed:
+			heur += len(self.input)
 		return heur
 
 class WarehouseWithoutHeuristic(Warehouse):
@@ -223,9 +225,9 @@ class WarehouseHeuristicInput(Warehouse):
 class State():
 	def __init__(self, warehouse, cost = 0, priority = 0, history = (None, None)):
 		self.warehouse = warehouse # current warehouse state
-		self.cost = cost # number of moves
-		self.priority = priority 
-		self.history = history 
+		self.cost = cost # accumulated cost g(n)
+		self.priority = priority # evaluation functione f(n) = g(n) + h(n)
+		self.history = history # tuples (action, previous state)
 
 	def __lt__(self, other): # Overrides "<" operator, needed in PriorityQueue.
 		return self.priority < other.priority
@@ -278,15 +280,13 @@ class AStar():
 if __name__ == "__main__":
 	import sys
 
-	#N=1000 S=4 Total expanded nodes: 10744 Time: 80.24
-
-	N = 40 #number of box in warehouse
+	N = 20 #number of box in warehouse
 	S = 4 #size of warehouse (num_stack)
 
-	rnd_state = get_random_state(N,S, max_stack_items=100)
-	rnd_order = tuple(np.random.choice([id for stack in rnd_state for id in stack], 3, replace=False))
+	rnd_state = get_random_state(N,S, max_stack_items=100, num_type=10)
+	rnd_order = tuple(np.random.choice([id for stack in rnd_state for id in stack], 6, replace=False))
 	#rnd_order = get_random_orders(N,S, num_from=1, num_type=5)
-	in_order = get_random_orders(N+10,3,N+1)
+	in_order = get_random_orders(N+10,6,N+1)
 
 	#heur_order = heuristic_order(rnd_order, rnd_state)
 	heur_order = heuristic_duplicities_order(rnd_order, rnd_state)
@@ -300,11 +300,11 @@ if __name__ == "__main__":
 	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = True)
 
 
-	start = WarehouseHeuristicDuplicities3(rnd_state, heur_order, in_order, isInputProccesed = False, isOutputProccesed = True, max_stack_items=150)
+	start = WarehouseHeuristicDuplicities3(rnd_state, heur_order, in_order, isInputProccesed = True, isOutputProccesed = True, max_stack_items=150)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 
-	astar = AStar(1)
+	astar = AStar(1.3)
 
 	print(start)
 	start.visualization()

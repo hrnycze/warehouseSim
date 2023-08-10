@@ -85,8 +85,9 @@ class Warehouse():
                or (to_id < OUTPUT_ID or to_id >= len(self.state)):
                print("!ERROR: invalid move outside of warehouse!")
                return
-
-          object_to_move = None #object from top of stack
+          
+          #object from top of stack (from_id)
+          object_to_move = None 
 
           if from_id == INPUT_ID:
                object_to_move = self.input[0]
@@ -95,8 +96,8 @@ class Warehouse():
                object_to_move = self.state[from_id][0] 
                self.state[from_id] = np.delete(self.state[from_id], 0)
 
+          #insert object on the top of stack (to_id)
           if to_id == OUTPUT_ID:
-               #insert object on the top of stack
                self.output = np.insert(self.output, 0, object_to_move) 
           elif to_id == GROUND_ID:
                to_stack, to_stack_id = _find_empty_stack(self.state)
@@ -259,14 +260,10 @@ class Warehouse():
 
 if __name__ == "__main__":
 
-    # rndState = _get_random_state(6,3)
-    # print(rndState)
-    # print(frozenset(tuple(o) for o in rndState))
     N = 20 #number of box in warehouse
     S = 4 #size of warehouse (num_stack)
 
     state = get_random_state(N,S, 100, 5)
-    #out_order = get_random_orders(N,S, 1, 5)
     out_order = tuple(np.random.choice([id for stack in state for id in stack], S, replace=False))
     in_order = get_random_orders(N+3,3,N+1)
     wh = Warehouse(state, out_order, in_order, isInputProccesed=False, isOutputProccesed=True, max_stack_items=10)

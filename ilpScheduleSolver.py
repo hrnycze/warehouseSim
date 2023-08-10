@@ -3,6 +3,7 @@
 from ortools.linear_solver import pywraplp
 import numpy as np
 import matplotlib.pyplot as plt
+from queue import PriorityQueue
 
 def solve_schedule(num_machines, num_tasks, all_jobs_process_time, showResult = False):
     solver = pywraplp.Solver("Makespan Minimalizaion", pywraplp.Solver.SCIP_MIXED_INTEGER_PROGRAMMING)
@@ -83,7 +84,7 @@ def solve_schedule(num_machines, num_tasks, all_jobs_process_time, showResult = 
 
             # Marking the makespan
             ax.axvline(x=solver.Objective().Value(), color='r', linestyle='dashed')
-            ax.text(x=solver.Objective().Value()-2, y=0.5, s='C_max', color='r')
+            #ax.text(x=solver.Objective().Value()-2, y=0.5, s='C_max', color='r')
 
             plt.gca().invert_yaxis()
             ax.set_xlim(0, solver.Objective().Value()+2)
@@ -98,22 +99,29 @@ def solve_schedule(num_machines, num_tasks, all_jobs_process_time, showResult = 
         return None
 
 def create_batch(optimSchedule, startTime):
-    _, col = optimSchedule.shape
+    row, col = optimSchedule.shape
     print(optimSchedule)
-    bath = []
+    print(startTime)
+    batch = []
     subSchedule = optimSchedule[:,0]
-    for i in subSchedule:
-        bath.append(i+1)
-    for c in range(1,col):
-        subSchedule = optimSchedule[:,c]
-        subTime = startTime[:,c]
-        while subSchedule.any(): #is empty
-            removeId = np.argmin(subTime)
-            if subSchedule[removeId] != 0:
-                bath.append(subSchedule[removeId]+1)
-            subTime = np.delete(subTime, removeId)
-            subSchedule = np.delete(subSchedule, removeId)
-    return bath
+    subTime = startTime[:,1]
+    while subSchedule.size > 0: #not is empty
+        machineID = np.argmax(subTime)
+        batch.append(subSchedule[machineID]+1)
+        subTime = np.delete(subTime, machineID)
+        subSchedule = np.delete(subSchedule, machineID)
+
+    q = PriorityQueue()
+    for r in range(row):
+        for c in range(1,col):
+            if optimSchedule[r,c] == 0:
+                continue
+            q.put((startTime[r,c], optimSchedule[r,c]))
+
+    while not q.empty():
+        batch.append(q.get()[1]+1)
+
+    return batch
 
 
 
@@ -121,7 +129,7 @@ def create_batch(optimSchedule, startTime):
 
 if __name__ == "__main__":
     num_machines = 3
-    num_tasks = 10
+    num_tasks = 15
     #all_jobs_process_time = (np.random.rand(num_jobs,1)*np.ones((1,num_machines))).T
     #all_jobs_process_time = (np.array([[2, 3, 2, 2, 3, 2, 1, 2, 3, 5, 4, 3, 4, 1, 2]]).T*np.ones((1,num_machines))).T
     all_tasks_process_time = (np.random.randint(3, 15, size=(num_tasks, 1))*np.ones((1,num_machines))).T
