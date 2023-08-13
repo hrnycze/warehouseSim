@@ -27,6 +27,7 @@ aktualizována databáze podle simulátoru a celý proces se může opakovat.
 
 # Ukázka běhu A-Star algoritmu skladu:
 
+```
 Searching path: [[1, 2, 6, 3], [8, 7, 5], [4, 9]] 
 Input: (12, 14, 15) Output: [] Orders: (2, 3, 7, 8) Done: False -> for order (2, 3, 7, 8)
 Found a path (length=10): 
@@ -130,3 +131,5 @@ Input: (12, 14, 15) Output: [] Orders: (2, 3, 7, 8) Done: False
 [[], [15, 14, 12, 1, 5], [6, 4, 9]] 
 Input: [] Output: [2 3 7 8] Orders: (2, 3, 7, 8) Done: True
 Total expanded nodes: 10 Time: 0.01
+
+```
