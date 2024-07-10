@@ -1,0 +1,321 @@
+function GenerovaniDesek
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%   FUNKCE PRO GENEROVÁNÍ DESEK DO SKLADOVACÍCH POZIC  %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % nastavení viditelnosti proměnných pro všechny části programu
+    global  IO_pocet stoh_poloha celkem_ID pozice sirka_desky delka_desky matice_desek model_path
+    global natoceni 
+    global pocp 
+    global xtraj ytraj ztraj natoceni 
+    global var_rigid  pozice_typ_ID typ_ID natoceni_rad pozice_time mainFig ukazatelBehu IO_ID databaze
+    
+    set(ukazatelBehu, 'Color', [1, 0, 0]);
+    drawnow;
+    
+
+    pocetdesek = numel(stoh_poloha); %randi([20]); %počet desek, které se budou generovat
+    n = 11; % počet sloupců interní databáze matice_desek
+    
+    model_path = 'RobotickyManipulator_Simscape'; % Nastavení cesty k simscape modelu
+    open_system(model_path); % Otevření simscape modelu
+     
+    %pokud zde žádné desky nejsou, pokládám veškeré desky na podlahu a nemusím
+    %řešit počáteční hodnoty např. výšky, kam desku dát
+    
+    %celkem_ID označuje nejvyšší jednoznačné ID, které již bylo použito (pokud je nula, začínáme od úplně vymazaného skladu)
+    if celkem_ID == 0 
+        % Vytvoření matice
+        matice_desek = zeros(pocetdesek, n); 
+    
+        % Přidělení jednoznačného ID 
+        matice_desek(:, 1) = 1:pocetdesek; 
+        %načtení všech typ_ID
+        prvni_sloupec = typ_ID(:, 1);
+        %náhodné udělení typ_ID pro všechny gen. desky
+        typ_deskyID = datasample(prvni_sloupec, pocetdesek, 'Replace', true);
+        %uložení náhodně vygenerovaných typ_ID do matice_desek
+        matice_desek(:, 7) = typ_deskyID;
+        
+        %pro všechny generované desky 
+        for i = 1:length(typ_deskyID) 
+            %nalezení konkrétního typ_ID (na jakém řádku se nachází..)
+            index_radku = find(typ_ID(:, 1) == typ_deskyID(i), 1); 
+            
+            % Přiřazení hodnoty z typ_ID do matice_desek
+            matice_desek(i, 5) = typ_ID(index_radku, 2); %tloušťka desek
+            matice_desek(i, 6) = typ_ID(index_radku, 4); %označení materiálu
+            matice_desek(i, 8) = typ_ID(index_radku, 3); %hustota desky 
+            matice_desek(i,10) = typ_ID(index_radku, 5); %délka desky
+            matice_desek(i,11) = typ_ID(index_radku, 6); %šířka desky
+            matice_desek(i, 9) = double(posixtime(datetime('now'))); % cas vytvoreni desky
+        end
+    
+        % Vytvoření pole čísel od 1 do pocetdesek
+        cisla = 1:pocetdesek;
+        % Náhodné zamíchání čísel
+        cisla_zamichej = cisla(randperm(pocetdesek));
+        % náhodné rozdělení desek na skladovací polohy 
+        pozicedesek = randi([IO_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
+        % Postupné přidání prvků do cell podle pozice
+        for i = 1:pocetdesek
+            %přiřazení jednoznačného ID na pozice dle polohy desek
+            pozice{pozicedesek(i)} = [pozice{pozicedesek(i)}; cisla_zamichej(i)]; 
+            %přiřazení typ_ID na pozice dle polohy desek
+            pozice_typ_ID{pozicedesek(i)}=[pozice_typ_ID{pozicedesek(i)}; matice_desek(cisla_zamichej(i),7)]; %
+            %čas vytvoreni desky
+            pozice_time{pozicedesek(i)}=[pozice_time{pozicedesek(i)};  matice_desek(cisla_zamichej(i),9)];
+        end
+    
+        % Přiřazení hodnot na základě pozice
+        for p = IO_pocet:(numel(stoh_poloha)/2) 
+            %pro prádný sklad začínáme na 0
+            deska_teziste = 0; 
+            %každému jednoznačnému ID přiřadíme pozici x,y,z těžiště desky
+            for j = 1:length(pozice{p})
+                %načtení jednoznačného ID kvůli přirazení na správnou pozici
+                pozice_d = pozice{p}(j); 
+                %nalezení správného řádku.. jednoznačné pozice v matice_desek 
+                pozice_d_index=find(pozice_d == matice_desek(:,1));
+                %napočítání pozice z těžiště desky
+                deska_teziste = deska_teziste + matice_desek(pozice_d_index,5) / 2;
+                %přiřazení hodnot do matice_desek
+                matice_desek(pozice_d, 4) = deska_teziste; %pozice z těžiště
+                matice_desek(pozice_d, 2) = stoh_poloha(p, 1); %pozice x těžiště
+                matice_desek(pozice_d, 3) = stoh_poloha(p, 2); %pozice y těžiště
+                %pozice horní plochy desky
+                deska_teziste = deska_teziste + matice_desek(pozice_d_index,5) / 2; 
+            end
+        end
+        %Generování bloků do simscape a přiřazení vlastností
+        for i=1:length(matice_desek(:,1))
+                  %nastavení různých barev dle materiálu pro každou desku
+                  if matice_desek(i,6) == 1
+                        brick_colour = [0 0.4470 0.7410];
+                  elseif matice_desek(i,6) == 2
+                        brick_colour = [0.4500 0.3250 0.0980];
+                  elseif matice_desek(i,6) == 3
+                        brick_colour = [0.9290 0.6940 0.1250];
+                  elseif matice_desek(i,6) == 4
+                        brick_colour = [0.4940 0.1840 0.5560];
+                  elseif matice_desek(i,6) == 5
+                        brick_colour = [0.4660 0.6740 0.1880];
+                  elseif matice_desek(i,6) == 6
+                         brick_colour = [0.3010 0.7450 0.9330];
+                  elseif matice_desek(i,6) == 7
+                         brick_colour = [0.6350 0.0780 0.1840];
+                  elseif matice_desek(i,6) == 8
+                         brick_colour = [0.54 0.1 0.1];
+                  elseif matice_desek(i,6) == 9
+                         brick_colour = [0.1 0.54 0.1];
+                  elseif matice_desek(i,6) == 10
+                         brick_colour = [0.1 0.1 0.54];
+                  end
+           ID=matice_desek(i,1);
+           %přidání Brick Solid pojmenovaného dle jednoznačného SID (S1, S3...)
+           add_block("sm_lib/Body Elements/Brick Solid", [model_path '/S' num2str(ID)]);
+           %nastavení parametrů Brick Solid, rozměry, hustota, barva, umístění
+           set_param([model_path '/S' num2str(ID)], 'BrickDimensions', sprintf('[%f %f %f]', matice_desek(i,10), matice_desek(i,11), matice_desek(i,5)), 'position',  [560  -125+65*i   580   -85+65*i], 'GraphicDiffuseColor', sprintf('[%f %f %f]', brick_colour(1), brick_colour(2), brick_colour(3)), "Orientation", "left" ,'Density', num2str(matice_desek(i,8)));
+           %přidání Rigid Transform pojmenovaného dle jednoznačného RID (R1, R3...)
+           add_block("sm_lib/Frames and Transforms/Rigid Transform", [model_path '/R' num2str(ID)]);
+           %nastavení parametrů polohy x,y,z
+           set_param([model_path '/R' num2str(ID)], 'Translationmethod', 'Cartesian', 'TranslationCartesianOffset', sprintf('[%f %f %f]', matice_desek(i,2), matice_desek(i,3), -3+matice_desek(i,4)), 'position',  [400  -125+65*i   440   -85+65*i], "Orientation", "right");
+           %propojení Solid a Rigid
+           add_line(model_path, ['S' num2str(ID) '/RConn1'], ['R' num2str(ID) '/Rconn1']);
+           %propojení s WorldFrame
+           add_line(model_path, ['R' num2str(ID) '/Lconn1'], 'World Frame/Rconn1', 'autorouting', "on");     
+        end
+    else
+        %celkem ID není 0, načteme parametry ze skladu..
+        for l= IO_pocet+1:(numel(stoh_poloha)/2)
+            pozice_l=pozice{l};
+            %může být pozice prázdná
+            if isempty(pozice_l)
+                %nastavení výšky těžiště na konkrétní pozici 0
+                vysky_l(l)=0;
+                %tloušťka desky na konkrétní pozici 0 (není zde deska)
+                tloustky_l(l)=0;
+                %počet desek na konkrétní pozici (0)
+                pozice_ld(l)=length(pozice_l);
+            else
+                %na konkrétní pozici zjistíme jednozn ID vrchní desky, pak
+                %vyhledáme její pozici v matice_desek
+                hledana_deskaa=find(pozice{l}(end) == matice_desek(:,1));
+                %na konkrétní pozici načtu těžiště poslední desky
+                vysky_l(l)=matice_desek(hledana_deskaa,4);
+                %na konkrétní pozici načtu tloušťku poslední desky
+                tloustky_l(l)=matice_desek(hledana_deskaa,5);
+                %počet desek na konkrétní pozici
+                pozice_ld(l)=length(pozice{l});
+            end
+        end
+
+        %zjištění délky matice_desek (může dojít k vymazání nějakých desek,
+        %proto nepoužíváme celkem_ID)
+        delka_matice=length(matice_desek(:,1));
+        %rozšíření matice o pocetdesek
+        matice_desek = vertcat(matice_desek,zeros(pocetdesek, n));
+        
+        % Vložení jednoznačných ID od celkem_ID+1 do pocetdesek+celkem_ID
+        % do prvního sloupce za poslední řádek
+        matice_desek(delka_matice+1:pocetdesek+delka_matice, 1) = celkem_ID+1:pocetdesek+celkem_ID;
+        
+        % načtení typ_ID
+        prvni_sloupec = typ_ID(:, 1);
+        
+        % Generování náhodných typ_ID pro všechny desky
+        typ_deskyID = datasample(prvni_sloupec, pocetdesek, 'Replace', true);
+        % uložení náhodných typ_ID do matice_desek
+        matice_desek(delka_matice+1:pocetdesek+delka_matice, 7) = typ_deskyID;
+        
+        %pro každou vygenerovanou desku načtení všech parametrů
+        for i = 1:length(typ_deskyID)
+            % Nalezení řádku v typ_ID, kde se nachází hodnota typ_deskyID(i)
+            index_radku = find(typ_ID(:, 1) == typ_deskyID(i), 1);
+            
+            % přiřazení hodnot do matice_desek
+            matice_desek(i+delka_matice, 5) = typ_ID(index_radku, 2); % tloušťka desek
+            matice_desek(i+delka_matice, 6) = typ_ID(index_radku, 4); % materiál desky
+            matice_desek(i+delka_matice, 8) = typ_ID(index_radku, 3); % hustota desky
+            matice_desek(i+delka_matice,10) = typ_ID(index_radku, 5); %délka desky
+            matice_desek(i+delka_matice,11) = typ_ID(index_radku, 6); %šířka desky
+            matice_desek(i+delka_matice, 9) = double(posixtime(datetime('now'))); % cas vytvoreni desky
+
+        end
+        
+        % Vytvoření pole čísel od posledního ID+1 do pocetdesek+poslední ID
+        cisla = celkem_ID+1:pocetdesek+celkem_ID;
+        % Náhodné zamíchání čísel
+        cisla_zamichej = cisla(randperm(pocetdesek));
+        % Náhodné rozdělení všech vygenerovaných desek do sklad. pozic
+        pozicedesek = randi([IO_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
+    
+        % Postupné přidání desek do pozic..
+        for i = 1:pocetdesek
+            pozice{pozicedesek(i)} = [pozice{pozicedesek(i)}; cisla_zamichej(i)];
+            pozice_typ_ID{pozicedesek(i)}=[pozice_typ_ID{pozicedesek(i)}; matice_desek(find(matice_desek(:,1))==cisla_zamichej(i),7)];
+            pozice_time{pozicedesek(i)}=[pozice_time{pozicedesek(i)}; (matice_desek(find(matice_desek(:,1))==cisla_zamichej(i),9))];
+        end
+        
+        %přiřazení pozice x,y,z do matice_desek.. 
+        for p = IO_pocet:(numel(stoh_poloha)/2)
+            %načtení těžiště vrchní desky na konkr. pozici před generováním
+            deska_teziste=vysky_l(p);
+            %přiřazení parametrů pro nově generované desky
+            for j = 1:(length(pozice{p})-pozice_ld(p))
+                %zjištění jednoznačného ID desky, kvůli přiřazení do matice
+                pozice_d = pozice{p}(j+pozice_ld(p));
+                %nalezení jednoznačného ID v matice_desek
+                hledana_deska=find(matice_desek(:,1)==pozice_d);
+                if j==1
+                    %pokud je to první deska na pozici, kterou přidáváme na
+                    %původní, musíme vypočítat výšku horní plochy původní
+                    %desky
+                    deska_teziste=deska_teziste+tloustky_l(p)/2;
+                    %těžiště pozice z konkrétní desky
+                    deska_teziste=deska_teziste+matice_desek(hledana_deska,5)/2; 
+                else
+                    %těžiště pozice z konkrétní desky
+                    deska_teziste=deska_teziste+matice_desek(hledana_deska,5)/2; 
+                end
+                %přiřazení těžiště v ose z do matice_desek
+                matice_desek(hledana_deska, 4) = deska_teziste;
+                % Přiřazení těžiště v ose x do matice_desek
+                matice_desek(hledana_deska, 2) = stoh_poloha(p,1); 
+                % Přiřazení těžiště v ose y do matice_desek
+                matice_desek(hledana_deska, 3) = stoh_poloha(p ,2);
+                %polohy z horní plochy desky.. 
+                deska_teziste=deska_teziste+matice_desek(hledana_deska,5)/2;
+            end
+        end
+        %přiřazení barvy a generování bloků v simscape
+        for i=delka_matice+1:length(matice_desek(:,1))
+                  %přiřazení barvy dle materiálu..
+                  if matice_desek(i,6) == 1
+                        brick_colour = [0 0.4470 0.7410];
+                  elseif matice_desek(i,6) == 2
+                        brick_colour = [0.4500 0.3250 0.0980];
+                  elseif matice_desek(i,6) == 3
+                        brick_colour = [0.9290 0.6940 0.1250];
+                  elseif matice_desek(i,6) == 4
+                        brick_colour = [0.4940 0.1840 0.5560];
+                  elseif matice_desek(i,6) == 5
+                        brick_colour = [0.4660 0.6740 0.1880];
+                  elseif matice_desek(i,6) == 6
+                         brick_colour = [0.3010 0.7450 0.9330];
+                  elseif matice_desek(i,6) == 7
+                         brick_colour = [0.6350 0.0780 0.1840];
+                  elseif matice_desek(i,6) == 8
+                         brick_colour = [0.54 0.1 0.1];
+                  elseif matice_desek(i,6) == 9
+                         brick_colour= [0.1 0.54 0.1];
+                  elseif matice_desek(i,6) == 10
+                         brick_colour = [0.1 0.1 0.54];
+                  end
+                %úprava celkem:ID
+                celkem_ID=celkem_ID+1;  
+                ID=celkem_ID;
+                %přidání Brick Solid pojmenovaného dle jednoznačného SID (S1, S3...)
+                add_block("sm_lib/Body Elements/Brick Solid", [model_path '/S' num2str(ID)]);
+                %nastavení parametrů Brick Solid, rozměry, hustota, barva, umístění
+                set_param([model_path '/S' num2str(ID)], 'BrickDimensions', sprintf('[%f %f %f]', matice_desek(i,10), matice_desek(i,11), matice_desek(i,5)), 'position',  [560  -125+65*i   580   -85+65*i], 'GraphicDiffuseColor', sprintf('[%f %f %f]', brick_colour(1), brick_colour(2), brick_colour(3)), "Orientation", "left" ,'Density', num2str(matice_desek(i,8)));
+                %přidání Rigid Transform pojmenovaného dle jednoznačného RID (R1, R3...)
+                add_block("sm_lib/Frames and Transforms/Rigid Transform", [model_path '/R' num2str(ID)]);   
+                %nastavení parametrů polohy x,y,z
+                set_param([model_path '/R' num2str(ID)], 'Translationmethod', 'Cartesian', 'TranslationCartesianOffset', sprintf('[%f %f %f]', matice_desek(i,2), matice_desek(i,3), -3+matice_desek(i,4)), 'position',  [400  -125+65*i   440   -85+65*i], "Orientation", "right");
+                %propojení R a S
+                add_line(model_path, ['S' num2str(ID) '/RConn1'], ['R' num2str(ID) '/Rconn1']);
+                %propojení World Frame a R
+                add_line(model_path, ['R' num2str(ID) '/Lconn1'], 'World Frame/Rconn1', 'autorouting', "on"); 
+        end 
+    end
+    
+    %update celkem_ID;
+    celkem_ID = max(matice_desek(:, 1));
+    %uložení důležitých hodnot int. a ext. databáze skladu 
+    save('desky_data.mat', 'pozice', 'pozice_typ_ID', 'pozice_time', 'matice_desek', 'celkem_ID');
+    
+    % Uložení změn
+    save_system(model_path);
+    
+    if databaze==1
+        length(matice_desek(:,1));
+        skladData=zeros(length(matice_desek(:,1)),4);
+        n=0;
+        for i=1:length(pozice)
+            if length(pozice{i})==0
+            else
+                for j=1:length(pozice{i})
+                    n=n+1;
+                     if length(IO_ID) >= i
+                        skladData(n, 1) = IO_ID(i);
+                     else
+                        skladData(n, 1) = i-length(IO_ID)-1;
+                     end
+                        skladData(n, 2) = pozice{i}(j);
+                        skladData(n, 3) = pozice_typ_ID{i}(j);
+                        skladData(n, 4) = pozice_time{i}(j);   
+                end
+            end
+        end
+        
+        % Převedení matice na buňky obsahující řádky a kulaté závorky s čárkami
+        skladCell = cellfun(@(row) ['(', num2str(row(1), '%d, '), num2str(row(2), '%d, '), num2str(row(3), '%d, '), num2str(row(4), '%d'), ')'], num2cell(skladData, 2), 'UniformOutput', false);
+    
+        % Spojení buněk do jednoho řetězce s mezerami a odstranění poslední čárky
+        skladString = ['[', strjoin(skladCell, ', '), ']'];
+    
+        setStorage(skladString);
+    else
+    end
+
+    %rychlé vykreslení aktuálního stavu skladu
+    xtraj=[0 pocp(1); 0.0047 pocp(1)];
+    ytraj=[0 pocp(2); 0.0047 pocp(2)];
+    ztraj=[0 -3+pocp(3); 0.0047 -3+pocp(3)];
+    natoceni=[0 natoceni_rad; 0.0047 natoceni_rad];
+    var_rigid=0;
+    simOut = sim('RobotickyManipulator_Simscape', 'StartTime', num2str(0), 'StopTime', num2str(0.0047));
+    
+    set(ukazatelBehu, 'Color', [0, 1, 0]);
+end

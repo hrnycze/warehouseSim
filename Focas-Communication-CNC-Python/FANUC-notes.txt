@@ -1,0 +1,24 @@
+Licence:
+Stránka pro licenci: https://lc.codemeter.com/91943/depot/index.php
+Key: GBLZ4-3RY8Q-U8AFE-U3KME-H7M2T
+
+
+
+Knihovna pro ovládání fanuc focas 2 -> Fwlib64.dll
+
+Dokumentace ke knihovně FOCAS. https://www.inventcom.net/fanuc-focas-library/program/cnc_download4
+
+Pochopení funkcí v knihovně examply složka Focas 2 -> obecný popis v pdf FOCAS2 LIBRARY
+SAMPLE PROGRAM MANUAL
+
+
+
+Dokumentace CNC FANUC, CNC guide 2, servo guide ...
+	https://my.fanuc.eu/
+
+Instalace a zprovoznění. všeho prezentace 
+
+
+Po instalaci nastavi cnc guide na základě prezentace + zaškrtnout v C:/Program Files (x86)/FANUC2/CNC GUIDE 2/NCGuide FS31i-B/OptionSetting.exe FANUC AUTO HMI-NC, FANUC AUTO HMI-NC SCREEN...
+
+
