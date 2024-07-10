@@ -2,12 +2,17 @@ function GenerovaniTrajektorie()
     global  robot natoceni amax vmax pocp endp pocp2 endp2 xtraj ytraj ztraj natoceni konec_time
     
     % vypocitani trajektorie
+    fprintf("UP: from [%f,%f,%f] to [%f,%f,%f]\n",pocp(1),pocp(2),pocp(3),pocp2(1),pocp2(2),pocp2(3))
     waypoints= [pocp(1) pocp2(1) ;pocp(2) pocp2(2) ;pocp(3) pocp2(3); 0 0 ];
     vellim=[-vmax vmax; -vmax vmax; -vmax vmax; -vmax vmax];
     accellim=[-amax amax; -amax amax; -amax amax; -amax amax];
+
+    fprintf("XY: from [%f,%f,%f] to [%f,%f,%f]\n",pocp2(1),pocp2(2),pocp2(3),endp2(1),endp2(2),endp2(3))
     [trajektorie,qd,qdd,t] = contopptraj(waypoints,vellim,accellim);
     waypoints= [pocp2(1) endp2(1) ;pocp2(2) endp2(2) ;pocp2(3) endp2(3); 0 0];
     [trajektorie2,qd2,qdd2,t2] = contopptraj(waypoints,vellim,accellim);
+
+    fprintf("DOWN: from [%f,%f,%f] to [%f,%f,%f]\n",endp2(1),endp2(2),endp2(3),endp(1),endp(2),endp(3))
     waypoints= [endp2(1) endp(1) ;endp2(2) endp(2) ;endp2(3) endp(3); 0 0 ];
     [trajektorie3,qd3,qdd3,t3] = contopptraj(waypoints,vellim,accellim);
     

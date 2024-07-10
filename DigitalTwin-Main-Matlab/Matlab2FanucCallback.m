@@ -1,6 +1,6 @@
 function [fanuc_state, simOut] = Matlab2FanucCallback()
 
-global konec_time
+global konec_time pocp2 endp2 endp
 
 % Adjust paths according to your setup
 python_script_path = "C:\Users\Jan-Lenovo\Documents\HoufekGJ\warehouseSim\Focas-Communication-CNC-Python\Python\Matlab2FocasCallback.py"; % e.g., 'C:\Users\yourname\myscript.py'
@@ -23,7 +23,8 @@ python_32_interpreter_path = 'C:\Users\Jan-Lenovo\.conda\envs\py310_32\python.ex
 %% asynchronous run
 
 % Create a function handle to run the Python script
-runPythonScript = @() system([sprintf('"%s" "%s"', python_32_interpreter_path, python_script_path)]);
+scale = 1000;
+runPythonScript = @() system([sprintf('"%s" "%s" %f,%f,%f,%f', python_32_interpreter_path, python_script_path, pocp2(3)*scale,endp2(1)*scale,endp2(2)*scale,endp(3)*scale)]);
 
 % Use parfeval to run the Python script in a background worker
 pool = gcp();  % Get the current parallel pool, or create a new one
@@ -36,6 +37,7 @@ disp('Python script is running in the background...');
 disp('Performing other MATLAB-Simulink-Simscape operations...');
 
 GenerovaniTrajektorie();
+pause(3)
 simOut = sim('RobotickyManipulator_Simscape', 'StartTime', num2str(0), 'StopTime', num2str(konec_time));
 pause(konec_time-1.5);
 

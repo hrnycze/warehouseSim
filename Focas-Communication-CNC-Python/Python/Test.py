@@ -18,9 +18,12 @@ cnc_folder_path = "//CNC_MEM/USER/LIBRARY/"
 
 
 
-
 #m_FlibHndl,ret = FOCAS.ConnectToCNC("192.168.1.10", 8193)
 m_FlibHndl,ret = FOCAS.ConnectToCNC("127.0.0.1", 8193)
+
+FanucCNC.Download(m_FlibHndl,NcProgramPath)
+
+exit()
 
 #FOCAS.StartProgram(m_FlibHndl)
 
