@@ -2,7 +2,7 @@ import sys
 import time
 import numpy as np
 from warehouse import Warehouse
-from astar import WarehouseHeuristicDuplicities3, AStar
+from astar import WarehouseHeuristicDuplicities3, AStar, heuristic_duplicities_order
 
 def process_input_string(input_string):
     # Split the input string by ', ' followed by '['
@@ -30,9 +30,10 @@ def main():
     warehouse_inner_state = process_input_string(warehouse_inner_state_string)
     warehouse_in_order_str = tuple(eval(argv[2])) # "[1,2,3]"
     warehouse_out_order_str = tuple(eval(argv[3])) # "[3,5,6]"
+    heur_order = heuristic_duplicities_order(warehouse_out_order_str, warehouse_inner_state)
 
     state = WarehouseHeuristicDuplicities3(warehouse_inner_state,
-                                           warehouse_out_order_str, 
+                                           heur_order, 
                                            warehouse_in_order_str,
                                            isInputProccesed=True,
                                            isOutputProccesed=True,
@@ -51,16 +52,16 @@ def main():
         # print(f"Found a path (length={len(path)}): ")
         # print(path)
         
-        # print("How it goes: ")
+        #print("How it goes: ")
 
         s = state.clone()
         # print(s)
         # s.visualization()
         for a in path:
             s.move(a)
-            #print(s)
-            # print(f"------------ Action: {a} ----------")
-            # s.visualization() 
+        #     print(s)
+        #     print(f"------------ Action: {a} ----------")
+        #     s.visualization() 
         # print(s) 
         
         #stdout

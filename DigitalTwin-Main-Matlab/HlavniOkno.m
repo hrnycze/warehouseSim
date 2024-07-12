@@ -258,7 +258,8 @@ function HlavniMenu
     end
 
     function AutomatickePreskladneni()
-        AutomatickyPreskladnit();
+        %AutomatickyPreskladnit();
+        AutomatickyPreskladnitPython();
     end
 
     function ManualneSpustit()

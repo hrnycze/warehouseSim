@@ -55,8 +55,8 @@ def _find_empty_stack(stacks):
                return stack, stack_id
 
 GROUND_ID = -1
-OUTPUT_ID = -2
-INPUT_ID = -3
+INPUT_ID = -2
+OUTPUT_ID = -3
 
 class Warehouse():
      expanded = 0
@@ -111,8 +111,9 @@ class Warehouse():
 
           if self.isInputProccesed and self.input is not None and len(self.input) > 0:
                for to_id, to_stack in enumerate(self.state):
-                    if to_stack.size == 0 and ((INPUT_ID, GROUND_ID) not in moves):
-                         moves.append((INPUT_ID, GROUND_ID))
+                    # BUG FIX: because ING. Vlcek wrong impelentation Digital Twin
+                    if to_stack.size == 0: # and ((INPUT_ID, GROUND_ID) not in moves):
+                         moves.append((INPUT_ID, to_id)) #(INPUT_ID, GROUND_ID)
                     elif to_stack.size > 0 and to_stack.size < self.max_stack_items:
                          moves.append((INPUT_ID, to_id))
 
@@ -134,10 +135,15 @@ class Warehouse():
                               continue
 
                          if len(from_stack) > 1 and to_stack.size == 0 and ((from_id, GROUND_ID) not in moves):
-                              # move object from top of from_stack to ground
-                              moves.append((from_id, GROUND_ID)) 
+                              # # move object from top of from_stack to ground
+                              # moves.append((from_id, GROUND_ID)) 
+                              # continue
+                              
+                              # BUG FIX: because ING. Vlcek wrong impelentation Digital Twin
+                              to_stack, to_stack_id = _find_empty_stack(self.state)
+                              moves.append((from_id, to_stack_id))
                               continue
-                         
+
                          if to_stack.size > 0 and to_stack.size < self.max_stack_items:
                               moves.append((from_id, to_id))
 
