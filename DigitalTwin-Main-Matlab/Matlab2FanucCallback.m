@@ -36,8 +36,8 @@ disp('Python script is running in the background...');
 % You can perform other tasks here
 disp('Performing other MATLAB-Simulink-Simscape operations...');
 
-GenerovaniTrajektorie();
-pause(3)
+% GenerovaniTrajektorie();
+% pause(3)
 simOut = sim('RobotickyManipulator_Simscape', 'StartTime', num2str(0), 'StopTime', num2str(konec_time));
 pause(konec_time-1.5);
 

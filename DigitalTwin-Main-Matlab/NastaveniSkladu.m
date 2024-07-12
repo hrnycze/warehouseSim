@@ -10,6 +10,9 @@ global pocp endp pocp2 endp2
 global xtraj ytraj ztraj natoceni konec_time
 global pohon1 pohon2 nuzky1 nuzky2 nuzky3 nuzky4 poz_ID_poc var_rigid A pozice_typ_ID typ_ID mainFig ukazatelBehu
 global databaze
+global USE_REAL_FANUC_CNC
+
+% USE_REAL_FANUC_CNC = true;
 
     % Vytvoření nového okna pro aplikaci
     fig = uifigure('Name', 'Naskladnění desek');

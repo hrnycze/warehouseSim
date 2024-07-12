@@ -22,7 +22,7 @@ function HlavniMenu
     global pohon1 pohon2 nuzky1 nuzky2 nuzky3 nuzky4 poz_ID_poc var_rigid A pozice_typ_ID typ_ID mainFig Vysunuti ukazatelBehu pozice_time databaze
     global USE_REAL_FANUC_CNC
 
-    USE_REAL_FANUC_CNC = true;
+    
 
     % načtení parametrů..
     NacteniParametru();

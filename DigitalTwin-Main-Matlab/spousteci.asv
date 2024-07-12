@@ -207,20 +207,9 @@ function spousteci(A)
                 
                 % generování trajektorie a simulace pohybu
                 disp("Path: přímo nad stoh A-->B")
-
                 GenerovaniTrajektorie();
-                if USE_REAL_FANUC_CNC
-                    %TODO: RUN FANUC, WAIT END MOVE
-                    [fanuc_state, simOut] = Matlab2FanucCallback();
-                    if fanuc_state ~= 0
-                        error("FAILED to finish move on FANUC!")
-                    else
-                        disp("FANUC: Move done.")
-                    end
-                else
-                    simOut = sim('RobotickyManipulator_Simscape', 'StartTime', num2str(0), 'StopTime', num2str(konec_time));
-                    pause(konec_time-1.5);
-                end
+                simOut = sim('RobotickyManipulator_Simscape', 'StartTime', num2str(0), 'StopTime', num2str(konec_time));
+                pause(konec_time-1.5);
 
                 %TODO: RUN FANUC, WAIT END MOVE
                 
@@ -270,7 +259,6 @@ function spousteci(A)
                 % generování trajektorie a simulace pohybu
                 disp("Path: gripper anywhere A ---> B PICK")
 
-                GenerovaniTrajektorie();
                 if USE_REAL_FANUC_CNC
                     %TODO: RUN FANUC, WAIT END MOVE
                     [fanuc_state, simOut] = Matlab2FanucCallback();
@@ -280,6 +268,7 @@ function spousteci(A)
                         disp("FANUC: Move done.")
                     end
                 else
+                    GenerovaniTrajektorie();
                     simOut = sim('RobotickyManipulator_Simscape', 'StartTime', num2str(0), 'StopTime', num2str(konec_time));
                     pause(konec_time-1.5);
                 end
@@ -334,7 +323,6 @@ function spousteci(A)
                 % generování trajektorie a simulace pohybu
                 disp("Path: gripper anywhere A ---> B PLACE")
 
-                GenerovaniTrajektorie();
                 if USE_REAL_FANUC_CNC
                     %TODO: RUN FANUC, WAIT END MOVE
                     [fanuc_state, simOut] = Matlab2FanucCallback();
@@ -344,6 +332,7 @@ function spousteci(A)
                         disp("FANUC: Move done.")
                     end
                 else
+                    GenerovaniTrajektorie();
                     simOut = sim('RobotickyManipulator_Simscape', 'StartTime', num2str(0), 'StopTime', num2str(konec_time));
                     pause(konec_time-1.5);
                 end
