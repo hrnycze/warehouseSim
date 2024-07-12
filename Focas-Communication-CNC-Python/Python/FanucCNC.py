@@ -302,6 +302,28 @@ def PmcEDIT(FlibHndl: int) -> bool:
 
     return state
 
+def PmcEDIT2(FlibHndl: int) -> bool:
+    '''
+    This function switches FANUC CNC into EDIT mode.
+       
+    # Parameters:
+        FlibHndl (int): Library handle.
+
+    # Returns:
+        (bool):         Function switched successfuly return value True/False
+    '''
+
+    PmcButtonPush(FlibHndl, 2, 0, bytes([2]))
+
+    # Controlling operation success from output register
+    state = PmcBitDetection(FlibHndl, 2, 0, 1)
+
+    # validation of data
+    if state == False:
+        print("EDIT mode switch unsuccesfull")
+
+    return state
+
 def PmcMDI(FlibHndl: int) -> bool:
     '''
     This function switches FANUC CNC into MDI mode.

@@ -1,7 +1,7 @@
 from warehouse import Warehouse, get_random_orders, get_random_state
 from queue import PriorityQueue
 import time
-from pympler import asizeof
+#from pympler import asizeof
 import numpy as np
 
 def find_pos_in_stack(num, warehouse):
@@ -288,6 +288,8 @@ if __name__ == "__main__":
 	#rnd_order = get_random_orders(N,S, num_from=1, num_type=5)
 	in_order = get_random_orders(N+10,6,N+1)
 
+	#print(f"{type(rnd_state[1])} {type(rnd_order)} {type(in_order)}")
+
 	#heur_order = heuristic_order(rnd_order, rnd_state)
 	heur_order = heuristic_duplicities_order(rnd_order, rnd_state)
 
@@ -300,7 +302,7 @@ if __name__ == "__main__":
 	#start = WarehouseHeuristicInput(rnd_state, rnd_order, in_order, isInputProccesed = True, isOutputProccesed = True)
 
 
-	start = WarehouseHeuristicDuplicities3(rnd_state, heur_order, in_order, isInputProccesed = True, isOutputProccesed = True, max_stack_items=150)
+	start = WarehouseHeuristicDuplicities3(rnd_state, heur_order, in_order, isInputProccesed = False, isOutputProccesed = True, max_stack_items=150)
 
 	print(f"Searching path: {start} -> for order {start.get_goal_output()}")
 

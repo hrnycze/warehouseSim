@@ -23,7 +23,7 @@ def generate_nc_code(fname, z1, x2, y2, z3):
         "G21;",         # Set units to millimeters (if needed)
         "G17;",                  # Select the XY plane
         "G90;",             # Absolute positioning
-        f"G1 Z{z1} F90000;", # Move up to the first point in Z direction
+        f"G1 Z{z1} F10000;", # Move up to the first point in Z direction
         #f"G1 X{x1} Y{y1} F1000;", # Move to the first point in XY plane
         f"G1 X{x2} Y{y2};", # Move horizontally in XY plane to the second point
         f"G1 Z{z3};", # Move down to the Z coordinate of the second point

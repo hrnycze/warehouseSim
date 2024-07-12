@@ -16,12 +16,27 @@ NcProgramPath = "C:/Users/Jan-Lenovo/Documents/HoufekGJ/Fanuc/1_Lukas/FANUC/Gene
 #cnc_folder_path = "//CNC_MEM/USER/PATH1/"
 cnc_folder_path = "//CNC_MEM/USER/LIBRARY/"
 
+LOCALHOST = "127.0.0.1"
+IP_FANUC_CNC = "192.168.1.10"
+
 
 
 #m_FlibHndl,ret = FOCAS.ConnectToCNC("192.168.1.10", 8193)
-m_FlibHndl,ret = FOCAS.ConnectToCNC("127.0.0.1", 8193)
+m_FlibHndl,ret = FOCAS.ConnectToCNC(IP_FANUC_CNC, 8193)
 
-FanucCNC.Download(m_FlibHndl,NcProgramPath)
+res = FOCAS.check_cnc_mode_status(m_FlibHndl)
+print(f"Mode state: {res}")
+
+res = FanucCNC.PmcEDIT2(m_FlibHndl)
+print(f"Edit state: {res}")
+if not res:
+    print("ERRNO(105): FAIL to set EDIT!")
+    exit(105)
+
+#FanucCNC.Download(m_FlibHndl,NcProgramPath)
+# print(FOCAS.read_mode_signal(m_FlibHndl))
+# print(FOCAS.check_cnc_mode_status(m_FlibHndl))
+#FOCAS.set_mode_to_edit(m_FlibHndl)
 
 exit()
 

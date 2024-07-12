@@ -735,3 +735,73 @@ def check_cnc_mode_status(handler):
         return status.aut
     else:
         return None
+    
+
+# class IODBSGNL(ctypes.Structure):
+#     _fields_ = [
+#         ('datano', ctypes.c_short),
+#         ('type', ctypes.c_short),
+#         ('mode', ctypes.c_short),
+#         ('hndl_ax', ctypes.c_short),
+#         ('hndl_mv', ctypes.c_short),
+#         ('rpd_ovrd', ctypes.c_short),
+#         ('jog_ovrd', ctypes.c_short),
+#         ('feed_ovrd', ctypes.c_short),
+#         ('spdl_ovrd', ctypes.c_short),
+#         ('blck_del', ctypes.c_short),
+#         ('sngl_blck', ctypes.c_short),
+#         ('machn_lock', ctypes.c_short),
+#         ('dry_run', ctypes.c_short),
+#         ('mem_prtct', ctypes.c_short),
+#         ('feed_hold', ctypes.c_short),
+#         ('manual_rpd', ctypes.c_short),
+#         ('dummy', ctypes.c_short * 2)
+#     ]
+
+class IODBSGNL(ctypes.Structure):
+    _fields_ = [
+        ('datano', ctypes.c_short),
+        ('type', ctypes.c_short),
+        ('mode', ctypes.c_short),
+        ('hndl_ax', ctypes.c_short),
+        ('hndl_mv', ctypes.c_short),
+        ('rpd_ovrd', ctypes.c_short),
+        ('jog_ovrd', ctypes.c_short),
+        ('feed_ovrd', ctypes.c_short),
+        ('spdl_ovrd', ctypes.c_short),
+        ('blck_del', ctypes.c_short),
+        ('sngl_blck', ctypes.c_short),
+        ('machn_lock', ctypes.c_short),
+        ('dry_run', ctypes.c_short),
+        ('mem_prtct', ctypes.c_short),
+        ('feed_hold', ctypes.c_short)
+    ]
+
+
+
+def set_mode_to_edit(flib_hndl):
+    # Function prototype
+    focas.cnc_wropnlsgnl.argtypes = [ctypes.c_ushort, ctypes.POINTER(IODBSGNL)]
+    focas.cnc_wropnlsgnl.restype = ctypes.c_short
+
+    signal = IODBSGNL()
+    signal.mode = 4  # Assuming 1 is EDIT mode
+    
+    ret = focas.cnc_wropnlsgnl(flib_hndl, ctypes.byref(signal))
+    if ret != 0:  # EW_OK is usually 0
+        raise Exception(f"Error setting mode to EDIT: {ret}")
+    else:
+        print("Mode set to EDIT successfully.")
+
+
+def read_mode_signal(flib_hndl):
+    # Function prototype
+    focas.cnc_rdopnlsgnl.argtypes = [ctypes.c_ushort, ctypes.c_short, ctypes.POINTER(IODBSGNL)]
+    focas.cnc_rdopnlsgnl.restype = ctypes.c_short
+    signal = IODBSGNL()
+    slct_data = 0x0001  # Set bit 0 to read the mode signal
+
+    ret = focas.cnc_rdopnlsgnl(flib_hndl, slct_data, ctypes.byref(signal))
+    if ret != 0:  # EW_OK is usually 0
+        raise Exception(f"Error reading mode signal: {ret}")
+    return signal.mode

@@ -25,7 +25,7 @@ def main():
     arrgs = sys.argv[1].split(',')
     if len(arrgs) != 4:
         print("Wrong number of arrgs!")
-        print("Format: Matlab2FocasCallback.py z1,x2,x2,z3")
+        print("Format: FocasCallback.py z1,x2,x2,z3")
         sys.exit(1)
     #print(f"Arrgs: {arrgs}")
 
@@ -43,6 +43,10 @@ def main():
     if not res:
         print("ERRNO(105): FAIL to set EDIT!")
         exit(105)
+    # res = FOCAS.check_cnc_mode_status(m_FlibHndl)
+    # while res != 3:
+    #     print(f"EDIT mode needed! now: {res}")
+    #     res = FOCAS.check_cnc_mode_status(m_FlibHndl)
 
     res = FanucCNC.DeleteProg(m_FlibHndl, cnc_folder_path+NC_FILE_NAME)
     if not res:
@@ -65,8 +69,10 @@ def main():
     # Run NC code on FANUC CNC
     res = FanucCNC.PmcAUTO(m_FlibHndl)
     if not res:
-        print("ERRNO(106): FAIL to set EDIT!")
+        print("ERRNO(106): FAIL to set AUTO!")
         exit(106)
+    # while FOCAS.check_cnc_mode_status(m_FlibHndl) != 1:
+    #     print("AUTO mode needed!")
 
     res = FOCAS.StartProgram(m_FlibHndl)
     if not res:
