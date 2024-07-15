@@ -20,10 +20,7 @@ function HlavniMenu
     global pocp endp pocp2 endp2
     global xtraj ytraj ztraj natoceni_rad konec_time
     global pohon1 pohon2 nuzky1 nuzky2 nuzky3 nuzky4 poz_ID_poc var_rigid A pozice_typ_ID typ_ID mainFig Vysunuti ukazatelBehu pozice_time databaze
-    global USE_REAL_FANUC_CNC
-
     
-
     % načtení parametrů..
     NacteniParametru();
     evalin('base', 'databaze = 0;');
@@ -259,7 +256,7 @@ function HlavniMenu
 
     function AutomatickePreskladneni()
         %AutomatickyPreskladnit();
-        AutomatickyPreskladnitPython();
+        AutomatickyPreskladnitPython;
     end
 
     function ManualneSpustit()

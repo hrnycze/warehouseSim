@@ -7,9 +7,6 @@ global nejvyssi_x nejnizsi_x nejvyssi_y nejnizsi_y rozdil_x rozdil_y robot natoc
 global pocp endp pocp2 endp2
 global xtraj ytraj ztraj natoceni konec_time
 global pohon1 pohon2 nuzky1 nuzky2 nuzky3 nuzky4 poz_ID_poc Vysunuti natoceni_rad pozice_typ_ID databaze pozice_time
-global USE_REAL_FANUC_CNC
-
-USE_REAL_FANUC_CNC = false;
 
 % Nastavení cesty k modelu
 model_path = 'RobotickyManipulator_Simscape';

@@ -16,7 +16,8 @@ function stdout = Matlab2PathfindingCallback(out_order)
     for i = 1:length(cellArray)
         % Convert the cell contents to a string
         cellContent = cellArray{i};
-        cellString = sprintf('%d,', cellContent);
+        % needed reverse vector % ING. VLcek totally ingnored Ing. hrncir's work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        cellString = sprintf('%d,', flipud(cellContent)); 
         % Remove the trailing comma
         cellString = cellString(1:end-1);
         % Add brackets
@@ -33,7 +34,10 @@ function stdout = Matlab2PathfindingCallback(out_order)
         
     %mat to str
     in_order = pozice_typ_ID(1);
-    cellString = sprintf('%d,', in_order{1});
+
+    % needed reverse vector % ING. VLcek totally ingnored Ing. hrncir's work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    cellString = sprintf('%d,', flipud(in_order{1}));
+
     % Remove the trailing comma
     cellString = cellString(1:end-1);
     % Add brackets
@@ -44,12 +48,19 @@ function stdout = Matlab2PathfindingCallback(out_order)
 
     %mat to str
     %out_order = {[2;3]};%pozice_typ_ID(1);
-    cellString = sprintf('%d,', out_order{1});
+
+    % needed reverse vector % ING. VLcek totally ingnored Ing. hrncir's work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    cellString = sprintf('%d,', flipud(out_order{1})); % ING. VLcek totally ingnored Ing. hrncir's work !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
     % Remove the trailing comma
     cellString = cellString(1:end-1);
     % Add brackets
     cellString = ['[' cellString ']'];
     out_order_str = cellString;
+
+    
+    
+   
 
     % Display the final string
     disp(inner_state_str);
