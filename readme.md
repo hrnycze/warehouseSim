@@ -1,3 +1,9 @@
+# PREREQUISITIES
+* Optimalization Toolbox, Parallel Toolbox ... etc.
+* Fanuc - Focus + CNC Guide 2 
+* Python 3.10
+* (Docker) 
+
 ## TODO
 
 # MATLAB - Main
