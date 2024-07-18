@@ -1,7 +1,8 @@
 function stdout = Matlab2PathfindingCallback(out_order)
     global IO_pocet pozice_typ_ID
 
-    ScriptPath = "C:\Users\Jan-Lenovo\Documents\HoufekGJ\warehouseSim\Pathfinding-Python\PathfindingCallback.py";
+    root = "D:\Dropbox\Houfek Upload\TREND 2020\2024\3_Warehouse" ;
+    ScriptPath = root + "\warehouseSim\Pathfinding-Python\PathfindingCallback.py";
     
     inner_state = pozice_typ_ID(IO_pocet+1:length(pozice_typ_ID));
     

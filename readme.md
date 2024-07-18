@@ -1,7 +1,7 @@
 # PREREQUISITIES
 * Optimalization Toolbox, Parallel Toolbox ... etc.
-* Fanuc - Focus + CNC Guide 2 
-* Python 3.10
+* Fanuc - Focus (32 bits /or if lucky 64bits/) + CNC Guide 2 
+* Python 3.10 (32 bits /or if lucky 64bits/)
 * (Docker) 
 
 ## TODO
