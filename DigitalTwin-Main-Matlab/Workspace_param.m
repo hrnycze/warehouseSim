@@ -7,7 +7,4 @@ global nejvyssi_x nejnizsi_x nejvyssi_y nejnizsi_y rozdil_x rozdil_y robot natoc
 global pocp endp pocp2 endp2;
 global xtraj ytraj ztraj konec_time;
 global pohon1 pohon2 nuzky1 nuzky2 nuzky3 nuzky4 poz_ID_poc var_rigid A pozice_typ_ID typ_ID mainFig ukazatelBehu;
-global databaze
-global USE_REAL_FANUC_CNC
-
-USE_REAL_FANUC_CNC = false;
+global databaze skladove_pozice_pocet

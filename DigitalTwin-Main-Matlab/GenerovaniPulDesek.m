@@ -1,4 +1,4 @@
-function GenerovaniDesek
+function GenerovaniPulDesek
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%   FUNKCE PRO GENEROVÁNÍ DESEK DO SKLADOVACÍCH POZIC  %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -31,7 +31,7 @@ function GenerovaniDesek
         % Přidělení jednoznačného ID 
         matice_desek(:, 1) = 1:pocetdesek; 
         %načtení všech typ_ID
-        prvni_sloupec = typ_ID(11:end, 1);
+        prvni_sloupec = typ_ID(1:10, 1);
         %náhodné udělení typ_ID pro všechny gen. desky
         typ_deskyID = datasample(prvni_sloupec, pocetdesek, 'Replace', true);
         %uložení náhodně vygenerovaných typ_ID do matice_desek
@@ -58,7 +58,7 @@ function GenerovaniDesek
 
         % náhodné rozdělení desek na skladovací polohy 
         %pozicedesek = randi([IO_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
-        pozicedesek = randi([IO_pocet+1 IO_pocet+skladove_pozice_pocet], pocetdesek, 1);
+        pozicedesek = randi([IO_pocet+skladove_pozice_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
         
         % Postupné přidání prvků do cell podle pozice
         for i = 1:pocetdesek
@@ -164,7 +164,7 @@ function GenerovaniDesek
         matice_desek(delka_matice+1:pocetdesek+delka_matice, 1) = celkem_ID+1:pocetdesek+celkem_ID;
         
         % načtení typ_ID
-        prvni_sloupec = typ_ID(11:end, 1);
+        prvni_sloupec = typ_ID(1:10, 1);
         
         % Generování náhodných typ_ID pro všechny desky
         typ_deskyID = datasample(prvni_sloupec, pocetdesek, 'Replace', true);
@@ -175,7 +175,7 @@ function GenerovaniDesek
         for i = 1:length(typ_deskyID)
             % Nalezení řádku v typ_ID, kde se nachází hodnota typ_deskyID(i)
             index_radku = find(typ_ID(:, 1) == typ_deskyID(i), 1);
-            %disp(index_radku)
+            
             % přiřazení hodnot do matice_desek
             matice_desek(i+delka_matice, 5) = typ_ID(index_radku, 2); % tloušťka desek
             matice_desek(i+delka_matice, 6) = typ_ID(index_radku, 4); % materiál desky
@@ -192,7 +192,7 @@ function GenerovaniDesek
         cisla_zamichej = cisla(randperm(pocetdesek));
         % Náhodné rozdělení všech vygenerovaných desek do sklad. pozic
         %pozicedesek = randi([IO_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
-        pozicedesek = randi([IO_pocet+1 IO_pocet+skladove_pozice_pocet], pocetdesek, 1);
+        pozicedesek = randi([IO_pocet+skladove_pozice_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
     
         % Postupné přidání desek do pozic..
         for i = 1:pocetdesek

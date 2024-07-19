@@ -35,7 +35,8 @@ function GenerovaniSkladu
     end
     
     function nahodneSklad()
-        GenerovaniDesek()
+        GenerovaniDesek();
+        %GenerovaniPulDesek;
     end
 
     function databazeSklad()

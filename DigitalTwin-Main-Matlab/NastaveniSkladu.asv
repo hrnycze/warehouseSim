@@ -71,7 +71,7 @@ global databaze skladove_pozice_pocet
     % pokud se něco změní...
     prvniEditField.ValueChangedFcn = @(~, ~) UpdateVstupniPolohySize(); 
     druhyEditField.ValueChangedFcn = @(~, ~) UpdateVystupniPolohySize();
-    pulZbytkyEditField.ValueChangedFcn = @(~, ~) UpdateTabulka();
+    pulZbytkyEditField.ValueChangedFcn = @(~, ~) UpdateTabulka();;
     vstupni_table.CellEditCallback = @(~, ~) UpdateTabulka();
     vystupni_table.CellEditCallback = @(~, ~) UpdateTabulka();
     skladovaciPocetEditField.ValueChangedFcn = @(~, ~) UpdateTabulka();
@@ -167,22 +167,21 @@ global databaze skladove_pozice_pocet
     data(output_indices, :) = output_data;
     
     % Vytvoření pole s názvy řádků v tabulce
-    row_names = cell(1, prvniEditField.Value + druhyEditField.Value + pulZbytkyEditField.Value);
+    row_names = cell(1, prvniEditField.Value + druhyEditField.Value);
     row_names(input_indices) = cellstr(arrayfun(@(x) sprintf('vstupní %d', x), 1:length(input_indices), 'UniformOutput', false));
     row_names(output_indices) = cellstr(arrayfun(@(x) sprintf('výstupní %d', x), 1:length(output_indices), 'UniformOutput', false));
     
     % Nastavení názvů řádků do tabulky
     table.RowName = row_names;
     
-       % Pojmenujte řádky pro pozice0 až poziceN
+       % Pojmenujte řádky pro pozice0 až pozicen
     for i = 1:stohy_polohy_size-druhyEditField.Value-prvniEditField.Value-pulZbytkyEditField.Value
         row_names(output_indices(end) + i) = {sprintf('pozice%d', i - 1)};
     end
 
-    % Pojmenujte řádky pro 1/2pozice0 až 1/2poziceN
+    % Pojmenujte řádky pro pozice0 až pozicen
     for i = 1:pulZbytkyEditField.Value
-        %disp(i)
-        row_names(stohy_polohy_size-pulZbytkyEditField.Value + i) = {sprintf('1/2pozice%d', i - 1)};
+        row_names(output_indices(end) + i) = {sprintf('pozice%d', i - 1)};
     end
 
     % Nastavení názvů řádků do tabulky
@@ -191,8 +190,6 @@ global databaze skladove_pozice_pocet
     % Aktualizace dat v tabulce
     table.Data = data;
     stohy_polohy = data;
-
-    disp(table.RowName)
    end
 % Funkce pro přechod na konfiguraci skladu a uložení dat do souboru
     function ConfigureSklad()

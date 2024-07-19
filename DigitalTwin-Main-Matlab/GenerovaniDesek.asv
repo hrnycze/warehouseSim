@@ -164,7 +164,7 @@ function GenerovaniDesek
         matice_desek(delka_matice+1:pocetdesek+delka_matice, 1) = celkem_ID+1:pocetdesek+celkem_ID;
         
         % načtení typ_ID
-        prvni_sloupec = typ_ID(11:end, 1);
+        prvni_sloupec = typ_ID(:, 1);
         
         % Generování náhodných typ_ID pro všechny desky
         typ_deskyID = datasample(prvni_sloupec, pocetdesek, 'Replace', true);
@@ -175,7 +175,7 @@ function GenerovaniDesek
         for i = 1:length(typ_deskyID)
             % Nalezení řádku v typ_ID, kde se nachází hodnota typ_deskyID(i)
             index_radku = find(typ_ID(:, 1) == typ_deskyID(i), 1);
-            %disp(index_radku)
+            
             % přiřazení hodnot do matice_desek
             matice_desek(i+delka_matice, 5) = typ_ID(index_radku, 2); % tloušťka desek
             matice_desek(i+delka_matice, 6) = typ_ID(index_radku, 4); % materiál desky
