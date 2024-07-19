@@ -15,7 +15,7 @@ IP_FANUC_CNC = "192.168.1.10"
 
 # File name definition
 NC_FILE_NAME = "DIGITAL_TWIN_MOVE"
-NcProgramPath = "C:/Users/Jan-Lenovo/Documents/HoufekGJ/Fanuc/1_Lukas/FANUC/Generátor Gcode/name.txt"
+# NcProgramPath = "C:/Users/Jan-Lenovo/Documents/HoufekGJ/Fanuc/1_Lukas/FANUC/Generátor Gcode/name.txt"
 # NcProgramPath = "C:/Users/lukpi/Documents/Diplomova_prace_velke_soubory/Diplomova prace kod/FOCAS_connect/Data/Internal_data/NC program/"+file_name+".txt"
 cnc_folder_path = "//CNC_MEM/USER/PATH1/"
 #cnc_folder_path = "//CNC_MEM/USER/LIBRARY/"

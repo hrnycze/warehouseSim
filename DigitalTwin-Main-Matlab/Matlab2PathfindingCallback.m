@@ -1,8 +1,9 @@
 function stdout = Matlab2PathfindingCallback(out_order)
     global IO_pocet pozice_typ_ID
 
-    root = "D:\Dropbox\Houfek Upload\TREND 2020\2024\3_Warehouse" ;
-    ScriptPath = root + "\warehouseSim\Pathfinding-Python\PathfindingCallback.py";
+    %root = "D:\Dropbox\Houfek Upload\TREND 2020\2024\3_Warehouse\warehouseSim" ;
+    Root = fullfile(pwd, '..');
+    ScriptPath = Root + "\Pathfinding-Python\PathfindingCallback.py";
     
     inner_state = pozice_typ_ID(IO_pocet+1:length(pozice_typ_ID));
     
@@ -73,7 +74,8 @@ function stdout = Matlab2PathfindingCallback(out_order)
     %commandLine = ['python ' + ScriptPath + ' "[14], [4,15,1,1], [2,6,15], [4,10,12]" "[2,3]" "[1,1]" '];
 
     commandLine = ['python ' + ScriptPath + ' "' + inner_state_str + '" "' + in_order_str + '" "' + out_order_str + '"'];
-    disp(commandLine)
+    
+    %disp(commandLine)
 
     [status, stdout] = system(commandLine);
 

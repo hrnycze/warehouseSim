@@ -1,8 +1,10 @@
 # PREREQUISITIES
-* Optimalization Toolbox, Parallel Toolbox ... etc.
+* MATLAB - Optimalization Toolbox, Parallel Toolbox ... etc.
 * Fanuc - Focus (32 bits /or if lucky 64bits/) + CNC Guide 2 
 * Python 3.10 (32 bits /or if lucky 64bits/)
-* (Docker) 
+* Python Packages: Numpy
+* ! It's needed to have Python 32-bit /or if lucky 64bits/ in PATH !
+* (Docker :P) 
 
 ## TODO
 

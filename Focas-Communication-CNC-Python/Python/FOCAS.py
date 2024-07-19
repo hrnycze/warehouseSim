@@ -1,8 +1,20 @@
 import ctypes               # library for loading cpp files
-
+import os
 # Load the DLL file (Fwlib64.dll)
 #focas = ctypes.CDLL("C:/Users/lukpi/Documents/Obsidian_brain/Sešity/Práce/Houfek a.s/Projekt/Cpp wrapper/FOCAS2_Library/Fwlib64/Fwlib64.dll")
-focas = ctypes.CDLL("C:/Users/Jan-Lenovo/Documents/HoufekGJ/Fanuc/1_Lukas/FANUC/FOCAS2_Library/Fwlib/Fwlib32.dll")
+from pathlib import Path
+
+# Get the directory of the current script
+script_dir = Path(__file__).resolve().parent
+# Construct the path to the Fwlib32.dll relative to the script directory
+dll_path = script_dir / ".." / "FOCAS2_Library" / "Fwlib" / "Fwlib32.dll"
+# Resolve the path to get an absolute path
+dll_path = dll_path.resolve()
+print(dll_path)
+
+#"C:\Users\Jan-Lenovo\Documents\HoufekGJ\warehouseSim\Focas-Communication-CNC-Python\FOCAS2_Library\Fwlib\Fwlib32.dll"
+#focas = ctypes.CDLL("C:/Users/Jan-Lenovo/Documents/HoufekGJ/Fanuc/1_Lukas/FANUC/FOCAS2_Library/Fwlib/Fwlib32.dll")
+focas = ctypes.CDLL(str(dll_path))
 
 class IODBPMC(ctypes.Structure):                # PMC data structure
     _fields_ = [

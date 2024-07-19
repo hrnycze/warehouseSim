@@ -77,7 +77,7 @@ function AutomatickyPreskladnit
              out_order(i) = str2double(tabulka2.Data{i,2});
         end
        
-
+        disp("Finding path...")
         str = Matlab2PathfindingCallback({out_order});
         
         % Remove the brackets and parentheses

@@ -2,12 +2,11 @@ function [fanuc_state, simOut] = Matlab2FanucCallback()
 
 global konec_time pocp2 endp2 endp
 
-% Adjust paths according to your setup
- root_1 = "D:\Dropbox\Houfek Upload\TREND 2020\2024\3_Warehouse" ;
- root_2= "D:\Dropbox\Houfek Upload\TREND 2020\2024\3_Warehouse" ;
 
-python_script_path = root_1 + "\warehouseSim\Focas-Communication-CNC-Python\Python\FocasCallback.py"; % e.g., 'C:\Users\yourname\myscript.py'
-python_32_interpreter_path = 'C:\Users\Jan-Lenovo\.conda\envs\py310_32\python.exe';
+Root = fullfile(pwd, '..'); %"D:\Dropbox\Houfek Upload\TREND 2020\2024\3_Warehouse\warehouseSim"
+python_script_path = Root + "\Focas-Communication-CNC-Python\Python\FocasCallback.py"; % e.g., 'C:\Users\yourname\myscript.py'
+% It's needed to have Python 32-bit in PATH
+python_32_interpreter_path = "python"; %'C:\Users\Jan-Lenovo\.conda\envs\py310_32\python.exe';
 
 
 %% synchronous run
