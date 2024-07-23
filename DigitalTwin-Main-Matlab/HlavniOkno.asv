@@ -72,13 +72,9 @@ function HlavniMenu
     vymazatSkladButton.ButtonPushedFcn = @(~,~) VymazatSklad();
 
     % tlačitko automatický réžim
-    automatickyRezimButton = uibutton(mainFig, 'Text', 'Auto vyskladnění - cele desky', 'Position', [50, 480, 200, 30]);
+    automatickyRezimButton = uibutton(mainFig, 'Text', 'Auto - vyskladnění cele desky', 'Position', [50, 480, 200, 30]);
     % akce při stistknutí tlačítka
     automatickyRezimButton.ButtonPushedFcn = @(~,~) AutomatickePreskladneni();
-
-    automatickyRezimHalfButton = uibutton(mainFig, 'Text', 'Auto vyskladnění - pul desky', 'Position', [260, 480, 200, 30]);
-    % akce při stistknutí tlačítka
-    automatickyRezimHalfButton.ButtonPushedFcn = @(~,~) AutomatickeHalfPreskladneni();
 
     %tlačítko manuální réžim
     manualniRezimButton = uibutton(mainFig, 'Text', 'Manuální přeskladnění', 'Position', [50, 430, 200, 30]);
@@ -260,12 +256,7 @@ function HlavniMenu
 
     function AutomatickePreskladneni()
         %AutomatickyPreskladnit();
-        AutomatickyVyskladnitCeleDesky;
-    end
-
-    function AutomatickeHalfPreskladneni()
-        %AutomatickyPreskladnit();
-        AutomatickyVyskladnitPulDesky;
+        AutomatickyPreskladnitPython;
     end
 
     function ManualneSpustit()

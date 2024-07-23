@@ -1,11 +1,11 @@
-function stdout = Matlab2PathfindingCallback(out_order)
+function stdout = Matlab2PathfindingCallback(out_order, inner_state)
     global IO_pocet pozice_typ_ID
 
     %root = "D:\Dropbox\Houfek Upload\TREND 2020\2024\3_Warehouse\warehouseSim" ;
     Root = fullfile(pwd, '..');
     ScriptPath = Root + "\Pathfinding-Python\PathfindingCallback.py";
     
-    inner_state = pozice_typ_ID(IO_pocet+1:length(pozice_typ_ID));
+    %inner_state = pozice_typ_ID(IO_pocet+1:length(pozice_typ_ID));
     
     % mat to str
     % Define the cell array
