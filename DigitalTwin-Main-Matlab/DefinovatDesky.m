@@ -4,22 +4,22 @@ function DefinovatDesky()
     fig = uifigure('Name', 'Definované desky');
     fig.Position(1) = 700;
     fig.Position(2) = 200;
-    fig.Position(3) = 400;
+    fig.Position(3) = 500;
     fig.Position(4) = 600;
     fig.Color = '#DAE6FA';
     
     if databaze==0 
     % Matica pro uchování dat
     if isempty(typ_ID)
-        deskData = zeros(0, 6);
+        deskData = zeros(0, 7);
     else
         deskData = typ_ID;
     end
 
     % Vytvoření tabulky v GUI
-    tableUI = uitable(fig, 'Data', deskData, 'ColumnName', {'typ_ID', 'výška', 'hustota', 'materiál', 'délka', 'šířka'}, 'ColumnEditable', [true, true, true, true, true, true], 'ColumnFormat', {'numeric', 'numeric', 'numeric', 'numeric', 'numeric','numeric'}, 'Position', [20, 90, 360, 470], 'RowName', [], 'CellEditCallback', @aktualizovatData);
+    tableUI = uitable(fig, 'Data', deskData, 'ColumnName', {'typ_ID', 'výška', 'hustota', 'materiál', 'délka', 'šířka','typ_zbytek'}, 'ColumnEditable', [true, true, true, true, true, true,true], 'ColumnFormat', {'numeric', 'numeric', 'numeric', 'numeric', 'numeric','numeric','numeric'}, 'Position', [20, 90, 460, 470], 'RowName', [], 'CellEditCallback', @aktualizovatData);
     
-    tableUI.ColumnWidth = {50, 60, 60, 50, 60, 60};
+    tableUI.ColumnWidth = {50, 60, 60, 50, 60, 60,100};
 
     % Tlačítko pro přidání nového řádku
     addButton = uibutton(fig, 'push', 'Text', 'Přidat řádek', 'Position', [20, 55, 100, 25], 'ButtonPushedFcn', @pridatRadek);
@@ -38,15 +38,15 @@ function DefinovatDesky()
     
      % Matica pro uchování dat
     if isempty(typ_ID)
-        deskData = zeros(0, 6);
+        deskData = zeros(0, 7);
     else
         deskData = typ_ID;
     end
 
     % Vytvoření tabulky v GUI
-    tableUI = uitable(fig, 'Data', deskData, 'ColumnName', {'typ_ID', 'výška', 'hustota', 'materiál', 'délka', 'šířka'}, 'ColumnEditable', [false, false, false, false, false, false], 'ColumnFormat', {'numeric', 'numeric', 'numeric', 'numeric', 'numeric','numeric'}, 'Position', [20, 90, 360, 470], 'RowName', [], 'CellEditCallback', @aktualizovatData);
+    tableUI = uitable(fig, 'Data', deskData, 'ColumnName', {'typ_ID', 'výška', 'hustota', 'materiál', 'délka', 'šířka', 'typ_zbytek'}, 'ColumnEditable', [false, false, false, false, false, false, false], 'ColumnFormat', {'numeric', 'numeric', 'numeric', 'numeric', 'numeric','numeric','numeric'}, 'Position', [20, 90, 360, 470], 'RowName', [], 'CellEditCallback', @aktualizovatData);
     
-    tableUI.ColumnWidth = {50, 60, 60, 50, 60, 60};
+    tableUI.ColumnWidth = {50, 60, 60, 50, 60, 60, 100};
 
 
     zpetButton = uibutton(fig, 'Text', 'Zpět', 'Position', [20, 10, 80, 30], 'ButtonPushedFcn', @(src, event) zpet());
@@ -70,7 +70,7 @@ function DefinovatDesky()
             end
         end
 
-        newRow = [noveTypID, 0.02, 700, 1, 2700, 2000]; % Výchozí hodnoty pro nový řádek
+        newRow = [noveTypID, 0.02, 700, 1, 2.700, 2.000, 0]; % Výchozí hodnoty pro nový řádek
         deskData = [deskData; newRow];
         tableUI.Data = deskData;
 

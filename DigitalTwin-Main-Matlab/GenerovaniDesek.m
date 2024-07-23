@@ -15,7 +15,7 @@ function GenerovaniDesek
     
 
     pocetdesek = numel(stoh_poloha); %randi([20]); %počet desek, které se budou generovat
-    n = 11; % počet sloupců interní databáze matice_desek
+    n = 12; % počet sloupců interní databáze matice_desek
     
     model_path = 'RobotickyManipulator_Simscape'; % Nastavení cesty k simscape modelu
     open_system(model_path); % Otevření simscape modelu
@@ -30,8 +30,15 @@ function GenerovaniDesek
     
         % Přidělení jednoznačného ID 
         matice_desek(:, 1) = 1:pocetdesek; 
+        
         %načtení všech typ_ID
-        prvni_sloupec = typ_ID(11:end, 1);
+        % načtení typ_ID
+        prvni_sloupec = typ_ID(:, 1);
+
+        TYP_ZBYTEK = 0;
+        prvni_sloupec = prvni_sloupec(typ_ID(:, 7) == TYP_ZBYTEK);
+
+
         %náhodné udělení typ_ID pro všechny gen. desky
         typ_deskyID = datasample(prvni_sloupec, pocetdesek, 'Replace', true);
         %uložení náhodně vygenerovaných typ_ID do matice_desek
@@ -49,6 +56,7 @@ function GenerovaniDesek
             matice_desek(i,10) = typ_ID(index_radku, 5); %délka desky
             matice_desek(i,11) = typ_ID(index_radku, 6); %šířka desky
             matice_desek(i, 9) = double(posixtime(datetime('now'))); % cas vytvoreni desky
+            matice_desek(i,12) = typ_ID(index_radku, 7);
         end
     
         % Vytvoření pole čísel od 1 do pocetdesek
@@ -164,7 +172,10 @@ function GenerovaniDesek
         matice_desek(delka_matice+1:pocetdesek+delka_matice, 1) = celkem_ID+1:pocetdesek+celkem_ID;
         
         % načtení typ_ID
-        prvni_sloupec = typ_ID(11:end, 1);
+        prvni_sloupec = typ_ID(:, 1);
+
+        TYP_ZBYTEK = 0;
+        prvni_sloupec = prvni_sloupec(typ_ID(:, 7) == TYP_ZBYTEK);
         
         % Generování náhodných typ_ID pro všechny desky
         typ_deskyID = datasample(prvni_sloupec, pocetdesek, 'Replace', true);
@@ -183,7 +194,7 @@ function GenerovaniDesek
             matice_desek(i+delka_matice,10) = typ_ID(index_radku, 5); %délka desky
             matice_desek(i+delka_matice,11) = typ_ID(index_radku, 6); %šířka desky
             matice_desek(i+delka_matice, 9) = double(posixtime(datetime('now'))); % cas vytvoreni desky
-
+            matice_desek(i+delka_matice,12) = typ_ID(index_radku, 7);
         end
         
         % Vytvoření pole čísel od posledního ID+1 do pocetdesek+poslední ID
