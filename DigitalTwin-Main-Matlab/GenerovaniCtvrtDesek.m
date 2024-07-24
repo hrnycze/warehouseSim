@@ -1,4 +1,4 @@
-function GenerovaniPulDesek
+function GenerovaniCtvrtDesek
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%   FUNKCE PRO GENEROVÁNÍ DESEK DO SKLADOVACÍCH POZIC  %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,7 +33,7 @@ function GenerovaniPulDesek
         %načtení všech typ_ID
         prvni_sloupec = typ_ID(:, 1);
 
-        TYP_ZBYTEK = 1;
+        TYP_ZBYTEK = 2;
         prvni_sloupec = prvni_sloupec(typ_ID(:, 7) == TYP_ZBYTEK);
 
 
@@ -64,7 +64,7 @@ function GenerovaniPulDesek
 
         % náhodné rozdělení desek na skladovací polohy 
         %pozicedesek = randi([IO_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
-        pozicedesek = randi([IO_pocet+skladove_pozice_pocet+1 (numel(stoh_poloha)/2)-ctvrtky_pozice_pocet], pocetdesek, 1);
+        pozicedesek = randi([(numel(stoh_poloha)/2)-ctvrtky_pozice_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
         
         % Postupné přidání prvků do cell podle pozice
         for i = 1:pocetdesek
@@ -202,7 +202,7 @@ function GenerovaniPulDesek
         cisla_zamichej = cisla(randperm(pocetdesek));
         % Náhodné rozdělení všech vygenerovaných desek do sklad. pozic
         %pozicedesek = randi([IO_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
-        pozicedesek = randi([IO_pocet+skladove_pozice_pocet+1 (numel(stoh_poloha)/2)-ctvrtky_pozice_pocet], pocetdesek, 1);
+        pozicedesek = randi([(numel(stoh_poloha)/2)-ctvrtky_pozice_pocet+1 numel(stoh_poloha)/2], pocetdesek, 1);
     
         % Postupné přidání desek do pozic..
         for i = 1:pocetdesek

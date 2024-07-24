@@ -9,13 +9,13 @@ global nejvyssi_x nejnizsi_x nejvyssi_y nejnizsi_y rozdil_x rozdil_y robot natoc
 global pocp endp pocp2 endp2
 global xtraj ytraj ztraj natoceni konec_time
 global pohon1 pohon2 nuzky1 nuzky2 nuzky3 nuzky4 poz_ID_poc var_rigid A pozice_typ_ID typ_ID mainFig ukazatelBehu
-global databaze skladove_pozice_pocet
+global databaze skladove_pozice_pocet ctvrtky_pozice_pocet
 
     % Vytvoření nového okna pro aplikaci
     fig = uifigure('Name', 'Naskladnění desek');
     fig.Position(1) = 700;
     fig.Position(2) = 200;
-    fig.Position(3) = 400;
+    fig.Position(3) = 650;
     fig.Position(4) = 600;
 
     % Nastavení barvy pozadí
@@ -67,11 +67,15 @@ global databaze skladove_pozice_pocet
 
     pulZbytkyEditField = uieditfield(fig, 'numeric', 'Value', stohy_polohy_size, 'Position', [345, 290, 35, 22]);
     uilabel(fig, 'Text', 'Pocet 1/2 zbytky poloh:', 'Position', [212, 290, 150, 22]);
+
+    ctvrtZbytkyEditField = uieditfield(fig, 'numeric', 'Value', stohy_polohy_size, 'Position', [545, 290, 35, 22]);
+    uilabel(fig, 'Text', 'Pocet 1/4 zbytky poloh:', 'Position', [402, 290, 150, 22]);
     
     % pokud se něco změní...
     prvniEditField.ValueChangedFcn = @(~, ~) UpdateVstupniPolohySize(); 
     druhyEditField.ValueChangedFcn = @(~, ~) UpdateVystupniPolohySize();
     pulZbytkyEditField.ValueChangedFcn = @(~, ~) UpdateTabulka();
+    ctvrtZbytkyEditField.ValueChangedFcn = @(~, ~) UpdateTabulka();
     vstupni_table.CellEditCallback = @(~, ~) UpdateTabulka();
     vystupni_table.CellEditCallback = @(~, ~) UpdateTabulka();
     skladovaciPocetEditField.ValueChangedFcn = @(~, ~) UpdateTabulka();
@@ -143,10 +147,12 @@ global databaze skladove_pozice_pocet
     function UpdatePulZbytkyPolohySize()
     end
    skladove_pozice_pocet=0;
+   ctvrtky_pozice_pocet = 0;
    function UpdateTabulka()
     % Získání celkového počtu poloh ze vstupu
-    stohy_polohy_size = skladovaciPocetEditField.Value+prvniEditField.Value+druhyEditField.Value+pulZbytkyEditField.Value;
+    stohy_polohy_size = skladovaciPocetEditField.Value+prvniEditField.Value+druhyEditField.Value+pulZbytkyEditField.Value+ctvrtZbytkyEditField.Value;
     skladove_pozice_pocet = skladovaciPocetEditField.Value;
+    ctvrtky_pozice_pocet = ctvrtZbytkyEditField.Value;
 
     % Změna velikosti tabulky a vytvoření nových dat
     table.Position = [95, 70, 210, 212];
@@ -167,7 +173,8 @@ global databaze skladove_pozice_pocet
     data(output_indices, :) = output_data;
     
     % Vytvoření pole s názvy řádků v tabulce
-    row_names = cell(1, prvniEditField.Value + druhyEditField.Value + pulZbytkyEditField.Value);
+    % row_names = cell(1, prvniEditField.Value + druhyEditField.Value + pulZbytkyEditField.Value + ctvrtZbytkyEditField.Value);
+    row_names = cell(1, stohy_polohy_size);
     row_names(input_indices) = cellstr(arrayfun(@(x) sprintf('vstupní %d', x), 1:length(input_indices), 'UniformOutput', false));
     row_names(output_indices) = cellstr(arrayfun(@(x) sprintf('výstupní %d', x), 1:length(output_indices), 'UniformOutput', false));
     
@@ -175,14 +182,21 @@ global databaze skladove_pozice_pocet
     table.RowName = row_names;
     
        % Pojmenujte řádky pro pozice0 až poziceN
-    for i = 1:stohy_polohy_size-druhyEditField.Value-prvniEditField.Value-pulZbytkyEditField.Value
-        row_names(output_indices(end) + i) = {sprintf('pozice%d', i - 1)};
+    % for i = 1:stohy_polohy_size-druhyEditField.Value-prvniEditField.Value-pulZbytkyEditField.Value - ctvrtZbytkyEditField.Value
+    %     row_names(output_indices(end) + i) = {sprintf('pozice%d', i - 1)};
+    % end
+    for i=1 : skladovaciPocetEditField.Value
+        row_names(IO_pocet + i) = {sprintf('pozice%d', i - 1)};
     end
 
     % Pojmenujte řádky pro 1/2pozice0 až 1/2poziceN
     for i = 1:pulZbytkyEditField.Value
         %disp(i)
-        row_names(stohy_polohy_size-pulZbytkyEditField.Value + i) = {sprintf('1/2pozice%d', i - 1)};
+        row_names(stohy_polohy_size-pulZbytkyEditField.Value-ctvrtZbytkyEditField.Value + i) = {sprintf('1/2pozice%d', i - 1)};
+    end
+
+    for i=1: ctvrtZbytkyEditField.Value
+        row_names(stohy_polohy_size-ctvrtZbytkyEditField.Value + i) = {sprintf('1/4=pozice%d', i - 1)};
     end
 
     % Nastavení názvů řádků do tabulky
@@ -209,7 +223,7 @@ global databaze skladove_pozice_pocet
         IO_ID=[vstupni_ID vystupni_ID];
         
         % Uložení dat do souboru
-        save('sklad_data.mat', 'vstupni_ID', 'vystupni_ID', 'vstupni_polohy', 'vystupni_polohy', 'stoh_poloha', 'IO_ID','IO_pocet', 'skladove_pozice_pocet');
+        save('sklad_data.mat', 'vstupni_ID', 'vystupni_ID', 'vstupni_polohy', 'vystupni_polohy', 'stoh_poloha', 'IO_ID','IO_pocet', 'skladove_pozice_pocet', 'ctvrtky_pozice_pocet');
 
         % Získání seznamu bloků s názvem 'Zebrovani' v modelu
         blockList = find_system('RobotickyManipulator_Simscape', 'Name', 'Zebrovani');

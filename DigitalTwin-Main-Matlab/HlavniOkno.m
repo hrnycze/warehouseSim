@@ -38,7 +38,7 @@ function HlavniMenu
     % Nastaveni pozice x,y a velikost okna
     mainFig.Position(1) = 100;
     mainFig.Position(2) = 200;
-    mainFig.Position(3) = 600;
+    mainFig.Position(3) = 800;
     mainFig.Position(4) = 600;
     % barva pozadi
     mainFig.Color = '#DAE6FA';
@@ -79,6 +79,10 @@ function HlavniMenu
     automatickyRezimHalfButton = uibutton(mainFig, 'Text', 'Auto vyskladnění - pul desky', 'Position', [260, 480, 200, 30]);
     % akce při stistknutí tlačítka
     automatickyRezimHalfButton.ButtonPushedFcn = @(~,~) AutomatickeHalfPreskladneni();
+
+    automatickyRezimQuaterButton = uibutton(mainFig, 'Text', 'Auto vyskladnění - ctvrt desky', 'Position', [470, 480, 200, 30]);
+    % akce při stistknutí tlačítka
+    automatickyRezimQuaterButton.ButtonPushedFcn = @(~,~) AutomatickeQuaterPreskladneni();
 
     %tlačítko manuální réžim
     manualniRezimButton = uibutton(mainFig, 'Text', 'Manuální přeskladnění', 'Position', [50, 430, 200, 30]);
@@ -266,6 +270,10 @@ function HlavniMenu
     function AutomatickeHalfPreskladneni()
         %AutomatickyPreskladnit();
         AutomatickyVyskladnitPulDesky;
+    end
+
+    function AutomatickeQuaterPreskladneni()
+        AutomatickyVyskladnitCtvrtDesky;
     end
 
     function ManualneSpustit()

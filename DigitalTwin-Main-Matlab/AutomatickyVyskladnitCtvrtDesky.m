@@ -1,4 +1,4 @@
-function AutomatickyVyskladnitPulDesky
+function AutomatickyVyskladnitCtvrtDesky
     
     global IO_ID IO_pocet vstupni_polohy vystupni_polohy vystupni_ID vstupni_ID stoh_poloha num_list typ_desek celkem_ID pozice sirka_desky delka_desky matice_desek model_path;
     global nejvyssi_x nejnizsi_x nejvyssi_y nejnizsi_y rozdil_x rozdil_y robot natoceni uhel uhelrad svisle svisle2 amax vmax h  
@@ -10,7 +10,7 @@ function AutomatickyVyskladnitPulDesky
     vybranySoubor = ''; % Globální proměnná pro uchování cesty k vybranému souboru
 
     % Vytvoření nového okna pro automatické přeskladnění
-    automatickePreskladneniOkno = uifigure('Name', 'Aut. přeskladnění - pul desky', 'Position', [700, 350, 550, 500]);
+    automatickePreskladneniOkno = uifigure('Name', 'Aut. přeskladnění - ctvrt desky', 'Position', [700, 350, 550, 500]);
     automatickePreskladneniOkno.Color = '#DAE6FA';
 
     tabulka_desky_pocet = uitable(automatickePreskladneniOkno, 'Position', [290, 345, 260, 140], 'ColumnName', {'Typ Desky', 'Pocet ve skladu'}, 'ColumnEditable', [false false],'ColumnWidth', { 100, 100},'RowName', []);
@@ -77,7 +77,7 @@ function AutomatickyVyskladnitPulDesky
              out_order(i) = str2double(tabulka2.Data{i,2});
         end
        
-        inner_state = pozice_typ_ID((IO_pocet+skladove_pozice_pocet+1):(length(pozice_typ_ID)-ctvrtky_pozice_pocet));
+        inner_state = pozice_typ_ID((length(pozice_typ_ID)-ctvrtky_pozice_pocet+1):(length(pozice_typ_ID)));
 
         disp("Finding path...")
         str = Matlab2PathfindingCallback({out_order}, inner_state);
@@ -102,7 +102,7 @@ function AutomatickyVyskladnitPulDesky
         % Reshape the values into a 2xN matrix
         A = reshape(values, 2, [])';
 
-        offset = skladove_pozice_pocet;
+        offset = length(pozice_typ_ID)-ctvrtky_pozice_pocet-IO_pocet;
         % Add offset to each item in the matrix, except for negative values
         A = arrayfun(@(x) x + offset * (x >= 0), A);
         
@@ -208,7 +208,7 @@ function AutomatickyVyskladnitPulDesky
     
     typ_ID_copy = typ_ID;
 
-    temp = pozice_typ_ID((IO_pocet+skladove_pozice_pocet+1):(length(pozice_typ_ID)-ctvrtky_pozice_pocet));
+    temp = pozice_typ_ID((length(pozice_typ_ID)-ctvrtky_pozice_pocet+1):(length(pozice_typ_ID)));
     for i = 1: length(temp)
         dostupne_desky = [dostupne_desky; temp{i}];
     end

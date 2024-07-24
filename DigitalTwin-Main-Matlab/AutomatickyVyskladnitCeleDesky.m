@@ -77,7 +77,7 @@ function AutomatickyVyskladnitCeleDesky
              out_order(i) = str2double(tabulka2.Data{i,2});
         end
        
-        inner_state = pozice_typ_ID(IO_pocet+1:length(pozice_typ_ID)-skladove_pozice_pocet);
+        inner_state = pozice_typ_ID(IO_pocet+1:IO_pocet+skladove_pozice_pocet);
 
         disp("Finding path...")
         str = Matlab2PathfindingCallback({out_order}, inner_state);

@@ -5,8 +5,8 @@ function GenerovaniSkladu
     fig = uifigure('Name', 'Definované desky');
     fig.Position(1) = 700;
     fig.Position(2) = 600;
-    fig.Position(3) = 250;
-    fig.Position(4) = 200;
+    fig.Position(3) = 350;
+    fig.Position(4) = 250;
 
     fig.Color = '#DAE6FA';
     
@@ -14,14 +14,19 @@ function GenerovaniSkladu
     zpetButton.FontColor=[1,0,0];
 
     % tlačítko generovat sklad
-    nahodneSkladButton = uibutton(fig, 'Text', 'Náhodně generovat cele desky', 'Position', [25, 150, 180, 30]);
+    nahodneSkladButton = uibutton(fig, 'Text', 'Náhodně generovat cele desky', 'Position', [25, 200, 180, 30]);
     % akce při stistknutí tlačítka
     nahodneSkladButton.ButtonPushedFcn = @(~,~) nahodneSklad();
 
     % tlačítko generovat sklad
-    nahodnePulkySkladButton = uibutton(fig, 'Text', 'Náhodně generovat zbytky', 'Position', [25, 100, 180, 30]);
+    nahodnePulkySkladButton = uibutton(fig, 'Text', 'Náhodně generovat 1/2 zbytky', 'Position', [25, 150, 280, 30]);
     % akce při stistknutí tlačítka
     nahodnePulkySkladButton.ButtonPushedFcn = @(~,~) nahodneSklad2();
+
+     % tlačítko generovat sklad
+    nahodneCtvrtSkladButton = uibutton(fig, 'Text', 'Náhodně generovat 1/4 zbytky', 'Position', [25, 100, 280, 30]);
+    % akce při stistknutí tlačítka
+    nahodneCtvrtSkladButton.ButtonPushedFcn = @(~,~) nahodneSklad3();
 
     % tlačítko generovat sklad
     databazeSkladButton = uibutton(fig, 'Text', 'Načíst z databáze', 'Position', [25, 50, 180, 30]);
@@ -47,6 +52,11 @@ function GenerovaniSkladu
     function nahodneSklad2()
         %GenerovaniDesek();
         GenerovaniPulDesek;
+    end
+
+    function nahodneSklad3()
+        %GenerovaniDesek();
+        GenerovaniCtvrtDesek;
     end
 
     function databazeSklad()
