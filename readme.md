@@ -6,34 +6,27 @@
 * ! It's needed to have Python 32-bit /or if lucky 64bits/ in PATH !
 * (Docker :P) 
 
-## Repořitář modulů vytvořených vrámci diplomové práce Optimální řízení toku materiálu v chaotickém skladu s výrobními stroji
+## Repository of Modules Created for the Thesis
 
-![alt text](sklad.png)
+![Warehouse Diagram](Pathfinding-Python/sklad.png)
 
+# Architecture of the Planned Application with Created Modules
 
-# Architektura plánované aplikace s vytvořenými moduly
+The communication between the created modules is as follows. First, a required queue of available boards from the warehouse database must be created by the scheduling module or manually by the warehouse operator. The queue is then processed by the A-Star algorithm, which requires the warehouse simulator. Therefore, the current state of the warehouse must be loaded into the simulator from the database. After obtaining the sequence of actions from A-Star, the actions are performed in the real warehouse and simultaneously applied to the simulator. Finally, the database is updated according to the simulator, and the whole process can repeat.
 
-Komunikace mezi vytvořenými moduly je následující. Nejdříve musí být
-vytvořena požadovaná fronta z dostupných desek z databáze skladu rozvrhovacím modulem
-nebo případně ručně operátorem skladu. Fronta je dále zpracována A–Star
-algoritmem, který potřebuje simulátor skladu. Proto musí být do simulátoru nahrán aktuální
-stav skladu z databáze. Po získání posloupností akcí od A–Star jsou akce
-provedeny reálným skladem a současně aplikovány na simulátor. Nakonec je
-aktualizována databáze podle simulátoru a celý proces se může opakovat.
+![Architecture Diagram](Pathfinding-Python/arch.png)
 
-![alt text](Pathfinding-Python/arch.png)
+# Created Modules:
 
-# Vytvořené moduly:
+- **warehouse.py**: A simulator for formal representation of the warehouse
+- **astar.py**: An algorithm for optimal material movement in the warehouse
+- **ilpScheduleSolver.py**: A program for production scheduling on identical machines
+- **ilpScheduleTypeOfMachinesSolver.py**: A program for scheduling on dedicated machines
+- **schedule-plus-astar.py**: A demonstration of combining astar.py with production scheduling
+- **ilp-model.py**: An ILP model for scheduling with deadlines
+- **cp-model.py**: A CP model for scheduling with deadlines
 
-- warehouse.py Simulátor formální reprezentace skladu
-- astar.py Algoritmus pro optimální pohyb materiálu ve skladu
-- ilpScheduleSolver.py Program pro rozvrhování výroby na identických
-- ilpScheduleTypeOfMachinesSolver.py a na dedikovaných strojích
-- schedule-plus-astar.py Ukázka spojení astar.py s rozvrhováním výroby
-- ilp-model.py ILP model pro rozvrhování s deadliny
-- cp-model.py CP model pro rozvrhování s deadliny
-
-# Ukázka běhu A-Star algoritmu skladu:
+# A-Star Algorithm Warehouse Run Example:
 
 ```
 Searching path: [[1, 2, 6, 3], [8, 7, 5], [4, 9]] 
